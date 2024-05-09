@@ -18,7 +18,9 @@ https://www.revshells.com/
 
 https://github.com/samratashok/nishang/tree/master
 
-#### Sonstiges:
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
+#### Others:
 
 
 

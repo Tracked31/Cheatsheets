@@ -27,3 +27,6 @@
 
 `./setup-pure-ftp`
 
+## Environments:
+#### Python 2 Environment:
+
