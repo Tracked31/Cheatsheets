@@ -8,7 +8,8 @@
 `apt-get install pure-ftpd`
 
 `nano setup-pure-ftp`
-    ```
+
+```
     #!/bin/bash
     
     groupadd ftpgroup
@@ -20,6 +21,7 @@
     mkdir -p /ftphome
     chown -R ftpuser:ftpgroup /ftphome/
     /etc/init.d/pure-ftpd restart
+```
 
 `chmod 755 setup-pure-ftp`
 
