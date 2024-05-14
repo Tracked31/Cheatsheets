@@ -11,7 +11,7 @@
 
 ## General Tools:
 
-#### Others:
+[CyberChef](https://gchq.github.io/CyberChef/)
 
 ## Information Gathering:
 

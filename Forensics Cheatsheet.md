@@ -1,7 +1,7 @@
 # 2024 Forensics Cheatsheet
 
-## Allgemein
+## General
 
-## Datenträgerforensik
+## Disk forensics
 
-## Betriebssstemforensik
+## Operating system forensics
