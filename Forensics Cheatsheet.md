@@ -1,10 +1,22 @@
 # 2024 Forensics Cheatsheet
 
-## General
+## Table of Contents
+
+**1. [General](#general)**
+
+**2. [Disk forensics](#disk-forensics)**
+
+* [Metadata](#metadata)
+* [Disk backup](#disk-backup)
+* [File system analysis](#file-system-analysis)
+
+**3. [Operating system forensics](#operating-system-forensics)**
+
+## 1. General
 
 [VirusTotal](https://www.virustotal.com/gui/home/upload)
 
-## Disk forensics
+## 2. Disk forensics
 
 ### Metadata:
 
@@ -18,7 +30,7 @@ Mounting:
 
 `xmount --in <source format> <source location> --out <target format> <target location>`
 
-### Datenträgersicherung:
+### Disk Backup:
 
 Tools:
 
@@ -48,7 +60,7 @@ Context  Triggered Piecewise Hashing (Tools):
 
     ssdeep
 
-### Dateisystemanalyse:
+### File system analysis:
 
 #### Tools:
 
@@ -58,4 +70,4 @@ autopsy
 
 
 
-## Operating system forensics
+## 3. Operating system forensics
