@@ -2,15 +2,15 @@
 
 ## Table of Contents
 
-**1. [General](#general)**
+**1. [General](#1-general)**
 
-**2. [Disk forensics](#disk-forensics)**
+**2. [Disk forensics](#2-disk-forensics)**
 
 * [Metadata](#metadata)
 * [Disk backup](#disk-backup)
 * [File system analysis](#file-system-analysis)
 
-**3. [Operating system forensics](#operating-system-forensics)**
+**3. [Operating system forensics](#3-operating-system-forensics)**
 
 ## 1. General
 

