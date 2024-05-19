@@ -156,7 +156,7 @@ nmap <scan_type> <options> <machine_ip/network>
             -p1-1023                        scan ports 1 to 1023
             -F                              scan 100 most common ports
             -r                              scan ports in consecutive order
-            -- source-port <port_number>    specify port number
+            --source-port <port_number>    specify port number
 
         Scan Speed/Detection avoidance:
             -T<0-5>                         adjust speed of port scanning
