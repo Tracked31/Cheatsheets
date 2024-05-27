@@ -12,6 +12,9 @@
 
 **3. [Operating system forensics](#3-operating-system-forensics)**
 
+* [Linux](#linux)
+* [Windows](#windows)
+
 ## 1. General
 
 [VirusTotal](https://www.virustotal.com/gui/home/upload)
@@ -71,3 +74,35 @@ autopsy
 
 
 ## 3. Operating system forensics
+
+### Linux
+
+### Windows
+
+#### Locations:
+
+Registry:
+
+| Registry hive | Supporting files | 
+| ----------- | ----------- | 
+| HKEY_LOCAL_MACHINE\SAM | Sam, Sam.log, Sam.sav | 
+| HKEY_LOCAL_MACHINE\SECURITY | Text |
+| HKEY_LOCAL_MACHINE\SOFTWARE | Text |
+| HKEY_LOCAL_MACHINE\SYSTEM | Text |
+| HKEY_CURRENT_CONFIG | Text |
+| HKEY_USERS\DEFAULT | Text |
+
+#### Tools:
+
+RegRipper:
+
+(sometimes wrong outputs -> not used in entreprises)
+
+[Plugin Database]()
+
+regtime
+
+reg.exe QUERY ... 
+
+
+
