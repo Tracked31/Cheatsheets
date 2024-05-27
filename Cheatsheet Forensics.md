@@ -104,15 +104,15 @@ Registry:
 | HKEY_LOCAL_MACHINE\SYSTEM |  | C:\Windows\system32\config\SYSTEM| | System, System.alt, System.log, System.sav | 
 | HKEY_CURRENT_CONFIG |  || | System, System.alt, System.log, System.sav, Ntuser.dat, Ntuser.dat.log| 
 | HKEY_USERS\DEFAULT | | C:\Windows\system32\config\default | | Default, Default.log Default.sav |
-| | System-/Computer-weite Einstellungen | | %SystemRoot%\System32\config | |
-| |  Nutzer-spezifische Einstellungen | | %USERPROFILE%\NTUSER.dat | |
+| | System-/Computer-wide Configuration | | %SystemRoot%\System32\config | |
+| | User-specific Configuration | | %USERPROFILE%\NTUSER.dat | |
 | HKEY_USERS |  |  C:\Documents and Setting\User Profile\NTUSER.DAT| | | 
-| HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run | Autorun from programms | | | | 
-| HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce | Autorun from programms | | | | 
-| HKEY_LOCAL_MACHINE\System\ControlSet00x\Enum\USBSTOR | connected USB-devices | | | | 
-| HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles | connected WLAN | | | | 
-| HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs | currently opened documents | | | |
-| HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\RunMRU | userlist | | | |
+| HKEY_LOCAL_MACHINE\Software\ <br>Microsoft\Windows\CurrentVersion\Run | Autorun from programms | | | | 
+| HKEY_LOCAL_MACHINE\Software\ <br>Microsoft\Windows\CurrentVersion\RunOnce | Autorun from programms | | | | 
+| HKEY_LOCAL_MACHINE\System\ <br>ControlSet00x\Enum\USBSTOR | connected USB-devices | | | | 
+| HKEY_LOCAL_MACHINE\SOFTWARE\ <br>Microsoft\Windows NT\CurrentVersion\ <br>NetworkList\Profiles | connected WLAN | | | | 
+| HKEY_CURRENT_USER\Software\ <br>Microsoft\Windows\CurrentVersion\ <br>Explorer\RecentDocs | currently opened documents | | | |
+| HKEY_CURRENT_USER\software\ <br>microsoft\windows\currentversion\ <br>Explorer\RunMRU | userlist | | | |
 
 
 
