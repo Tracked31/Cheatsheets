@@ -12,13 +12,13 @@
 
 **3. [Operating system forensics (Linux)](#3-operating-system-forensics)**
 
-*[Live forensics](#live-forensics)
-*[Post- mortem forensics](#post-mortem-forensics)
+* [Live forensics](#live-forensics)
+* [Post- mortem forensics](#post-mortem-forensics)
 
 **4. [Operating system forensics (Windows)](#4-operating-system-forensics-windows)**
 
-*[Live forensics](#live-forensics-1)
-*[Post- mortem forensics](#post-mortem-forensics-1)
+* [Live forensics](#live-forensics-1)
+* [Post- mortem forensics](#post-mortem-forensics-1)
 
 **5. [Memory forensics](#5-memory-forensics)**
 
@@ -132,18 +132,18 @@ Registry:
 | | system-/computer-wide configuration | | %SystemRoot%\ <br>System32\config | |
 | | user-specific configuration | | %USERPROFILE%\ <br>NTUSER.dat | |
 | HKEY_USERS |  |  C:\Documents and Setting\ <br>User Profile\NTUSER.DAT| | | 
-| HKEY_LOCAL_MACHINE\Software\ <br>Microsoft\Windows\CurrentVersion\Run | Autorun from programms | | | | 
-| HKEY_LOCAL_MACHINE\Software\ <br>Microsoft\Windows\CurrentVersion\RunOnce | Autorun from programms | | | | 
+| HKEY_LOCAL_MACHINE\Software\ <br>Microsoft\Windows\CurrentVersion\ <br>Run | Autorun from programms | | | | 
+| HKEY_LOCAL_MACHINE\Software\ <br>Microsoft\Windows\CurrentVersion\ <br>RunOnce | Autorun from programms | | | | 
 | HKEY_LOCAL_MACHINE\System\ <br>ControlSet00x\Enum\USBSTOR | connected USB-devices | | | | 
 | HKEY_LOCAL_MACHINE\SOFTWARE\ <br>Microsoft\Windows NT\CurrentVersion\ <br>NetworkList\Profiles | connected WLAN | | | | 
 | HKEY_CURRENT_USER\Software\ <br>Microsoft\Windows\CurrentVersion\ <br>Explorer\RecentDocs | currently opened documents | | | |
 | HKEY_CURRENT_USER\software\ <br>microsoft\windows\currentversion\ <br>Explorer\RunMRU | userlist | | | |
 | HKEY_CURRENT_USER\Software\ <br>Microsoft\Windows\Current Version\ <br>Explorer| MRU (Most Recently Used) | | | |
-| | Shell Bags | C:\Users\BENUTZER\AppData\ <br>Local\Microsoft\ <br>Windows\USRCLASS.dat | | |
+| | Shell Bags | C:\Users\BENUTZER\ <br>AppData\Local\ <br>Microsoft\Windows\ <br>USRCLASS.dat | | |
 | HKCU\Software\Microsoft\ <br>Windows\CurrentVersion\ <br>Explorer\UserAssist | User Assist | | | |
 | | Amcache.hve / RecentFileCache.bcf | | \%SystemRoot%\ <br>AppCompat\Programs\ <br>Amcache.hve | |
 | SYSTEM\CurrentControlSet\ <br>Control\SessionManager\ <br>AppCompatCache | Registry: Shimcache (until Win10) <br>Path: Win11 Programm Compatibility Assistant (PCA) | | C:\Windows\ <br>appcompat\pca | |
-| | Windows 10 Timeline |  C:\Users\<Benutzer>\ <br>AppData\Local\Connected <br>DevicesPlatform\L.<Benutzer>\ <br>ActivitiesCache.db | | |
+| | Windows 10 Timeline |  C:\Users\<Benutzer>\ <br>AppData\Local\ <br>Connected <br>DevicesPlatform\L.<Benutzer>\ <br>ActivitiesCache.db | | |
 
 #### Tools:
 
