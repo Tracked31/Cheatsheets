@@ -17,6 +17,8 @@
 
 ## 1. General
 
+[Eric Zimmermann Tools](https://ericzimmerman.github.io/#!index.md)
+
 [VirusTotal](https://www.virustotal.com/gui/home/upload)
 
 ## 2. Disk forensics
@@ -79,28 +81,53 @@ autopsy
 
 ### Windows
 
+#### Live forensics:
+
+#### Tools:
+[Windows Sysinternals](https://docs.microsoft.com/de-de/sysinternals/downloads/sysinternals-suite)
+
+#### Skripte:
+
+
+
+#### Post-mortem forensics:
+
 #### Locations:
 
 Registry:
 
-| Registry hive | Supporting files | 
-| ----------- | ----------- | 
-| HKEY_LOCAL_MACHINE\SAM | Sam, Sam.log, Sam.sav | 
-| HKEY_LOCAL_MACHINE\SECURITY | Text |
-| HKEY_LOCAL_MACHINE\SOFTWARE | Text |
-| HKEY_LOCAL_MACHINE\SYSTEM | Text |
-| HKEY_CURRENT_CONFIG | Text |
-| HKEY_USERS\DEFAULT | Text |
+| Registry hive | description | Path to hive-file | environment variable | Supporting file
+| ----------- | ----------- | ----------- | ----------- | ----------- | 
+| HKEY_LOCAL_MACHINE\SAM | | C:\Windows\system32\config\SAM |  | Sam, Sam.log, Sam.sav | 
+| HKEY_LOCAL_MACHINE\SECURITY | | C:\Windows\system32\config\SECURITY| | Security, Security.log, Security.sav | 
+| HKEY_LOCAL_MACHINE\SOFTWARE |  | C:\Windows\system32\config\SOFTWARE| | Software, Software.log, Software.sav | 
+| HKEY_LOCAL_MACHINE\SYSTEM |  | C:\Windows\system32\config\SYSTEM| | System, System.alt, System.log, System.sav | 
+| HKEY_CURRENT_CONFIG |  || | System, System.alt, System.log, System.sav, Ntuser.dat, Ntuser.dat.log| 
+| HKEY_USERS\DEFAULT | | C:\Windows\system32\config\default | | Default, Default.log Default.sav |
+| | System-/Computer-weite Einstellungen | | %SystemRoot%\System32\config | |
+| |  Nutzer-spezifische Einstellungen | | %USERPROFILE%\NTUSER.dat | |
+| HKEY_USERS |  |  C:\Documents and Setting\User Profile\NTUSER.DAT| | | 
+| HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run | Autorun from programms | | | | 
+| HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce | Autorun from programms | | | | 
+| HKEY_LOCAL_MACHINE\System\ControlSet00x\Enum\USBSTOR | connected USB-devices | | | | 
+| HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles | connected WLAN | | | | 
+| HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\RecentDocs | currently opened documents | | | |
+| HKEY_CURRENT_USER\software\microsoft\windows\currentversion\Explorer\RunMRU | userlist | | | |
+
+
 
 #### Tools:
 
-RegRipper:
+RegRipper(sometimes wrong outputs -> not used in entreprises commonly):
 
-(sometimes wrong outputs -> not used in entreprises)
+```
+rip.pl -r <HIVE> -p <plugin>
+```
+[Plugin - HIVE Pair database](https://hexacorn.com/tools/3r.html)
 
-[Plugin Database]()
+[Plugin Database](https://github.com/keydet89/RegRipper3.0)
 
-regtime
+regtime plugin to create timeline etc.
 
 reg.exe QUERY ... 
 
