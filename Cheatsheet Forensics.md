@@ -30,7 +30,7 @@
 
 ## 2. Disk forensics
 
-### Metadata:
+### __Metadata:__
 
 MAC-Time: 
 
@@ -42,9 +42,9 @@ Mounting:
 
 `xmount --in <source format> <source location> --out <target format> <target location>`
 
-### Disk Backup:
+### __Disk Backup:__
 
-Tools:
+__Tools:__
 
 `dd` `dcfldd` `dc3dd`
 
@@ -72,9 +72,9 @@ Context  Triggered Piecewise Hashing (Tools):
 
     ssdeep
 
-### File system analysis:
+### __File system analysis:__
 
-#### Tools:
+#### __Tools:__
 
 The Sleuth Kit (TSK):
 
@@ -84,42 +84,159 @@ autopsy
 
 ## 3. Operating system forensics (Linux)
 
-### Live forensics:
+### __Live forensics:__
 
-### Post-mortem forensics:
+#### __Tools:__
+
+| Description | command |
+| ----------- | ----------- |
+| current local date and time| date -u |
+| Main memory content | dd if=/dev/mem |
+| Cached ARP Adressen | arp -vn |
+| IP Configuration | ip addr show <br>ifconfig -a <br>ip link show <br>ip tunnel show|
+| routing table| route –vn <br>route -vnC |
+| networkconnections | netstat -an |
+| loaded kernelmodules | lsmod |
+| open ports  | lsof –nP <br>lsof -i (which programm)|
+| open files | lsof <br>lsof +L1 (deleted but open)|
+| running processes | ps aux |
+| who was logged in? | last |
+| who is logged in? | who |
+| who is logged in and what is he doing? | w |
+| mounted file systems | mount –l, lspci |
+| system utilization | top -bn <x> |
+| runtime | uptime |
+| firewall | iptables-save -c |
+| Partitioning scheme | fdisk |
+| planned tasks | cat /etc/crontab |
+| save /proc directory | tar cvf proc_${PID}.tar /proc/${PID}/{auxv,cgroup,cmdline,comm,environ,limits,maps,sched,schedstat, sessionid,smaps,stack,stat,statm,status,syscall,wchan}|
+| save contents of the kernel ring buffer | dmesg|
+
+#### __Locations:__
+
+__log files:__
+| |  |
+| ----------- | ----------- |
+| security logs, application logs|  /var/log/ <br>/var/log/auth.log <br>/var/log/secure <br>/var/log/audit/audit.log <br>/var/log/sudo.log |
+| packet manager | /var/log/apt/* <br>/var/lib/dpkg/* <br>/var/log/dnf.rpm.log* <br>--> status files are important |
+| syslog| /var/log/messages <br>/var/log/syslog|
+
+```
+journalctl --dmesg
+journalctl --list-boots
+```
+__Systemd Journals:__
+
+/var/log/journal/…
+
+    system logs: system@*
+    user logs: user-1000@*
+        journalctl --file=user-1000@*
+
+__scheduled tasks:__
+
+/var/spool/cron<br>/var/spool/anacron<br>/etc/cron.*/*<br>/etc/cronta
+
+`systemctl status *timer`
+
+<br>
+
+__/proc/* - cat ...__ (dont use local cat)
+
+/proc/version, /proc/sys/kernel/name, /proc/sys/kernel/domainame, 
+<br>/proc/cpuinfo, /proc/modules, /proc/swaps, /proc/partitions, /proc/diskstats, 
+<br>proc/self/mounts, /proc/uptime
+
+Real-timeclock: /proc/driver/rtc 
+
+Main memory: /proc/kcore
+
+<br>
+
+__/var/lib/*__
+| |  |
+| ----------- | ----------- |
+|  | /var/lib/NetworkManager/* |
+|  | /var/lib/bluetooth/*  |
+|  | /var/lib/upower/* |
+| Crash-Dump | /var/lib/systemd/coredump |
+
+`man core`
+
+convert timestamp from epoch time `date -d @1655199269`
+
+#### __Live-Scripts:__
+
+[LinuxLiveResponse](https://github.com/puffyCid/linuxLiveResponse)
+
+### __Post-mortem forensics:__
+
+#### __Locations:__
+
+| Description | possible locations |
+| ----------- | ----------- |
+| Systemconfiguration | /etc/passwd <br>/etc/shadow <br>/etc/group <br>/etc/network/interfaces <br>/etc/inetd.conf  <br>services <br>/etc/rc.d or /etc/init.d or /etc/rc.local |
+| Linux standards base |  /etc/lsb-release or /etc/os-release |
+| Kernel version |  file /boot/vmlinuz  |
+| Kernel config/parameters | grub.cfg and /etc/sysctl.*|
+| Kernle Modules | /etc/modprobe* <br>/etc/modules <br>/etc/modules-load* |
+| Systemd networkconfiguration | /usr/lib/systemd/network <br>/lib/systemd/network (default) <br>/etc/systemd/network <br>/etc/network/interfaces  |
+| strange MAC-times | /sbin/ <br>/usr/sbin |
+| Bash-history | ~/.bash_history |
+| Autostart GUI-applications | ~/.config/autostart/* |
+| recently opened files | ~/.recently-used <br>~/.local/share/recently-used.xbel |
+| Thumbnails | ~/.cache/thumbnails |
+| overwritten MIME-types | ~/.config/mimeapps.list |
+| trash | ~/.local/share/Trash <br>~/.Trash |
+| user-specific data/configurations | /home/$USER <br>%USERPROFILE%|
+| temporary files | /tmp <br>/var/tmp |
+| swap partion | /etc/fstab |
 
 ## 4. Operating system forensics (Windows)
 
-### Live forensics:
+### __Live forensics:__
 
-#### Tools:
+#### __Tools:__
 `robocopy`
 
 `doskey /history`
 
 `tasklist /svc`
 
-`listdlls`
-
 ![Windows or. external tools](images\Tools.png)
-[Windows Sysinternals](https://docs.microsoft.com/de-de/sysinternals/downloads/sysinternals-suite)
 
+[Windows Sysinternals](https://docs.microsoft.com/de-de/sysinternals/downloads/sysinternals-suite)
+    
 https://live.sysinternals.com/
 
-Ressource Monitor
+most common ones:
+- Process Explorer
+- Autoruns
+- Process Hacker
+    - irsetup.exe
+    - WinCtrProc.exe
+    - WinCtrCon.exe
+- [psloggedon.exe](https://docs.microsoft.com/dede/sysinternals/downloads/psloggedon)
+- psfile.exe
+- [logonsessions.exe](https://docs.microsoft.com/dede/sysinternals/downloads/logonsessions)
+- [pslist.exe](https://docs.microsoft.com/de-de/sysinternals/downloads/pslist)
+- [listdlls.exe](https://docs.microsoft.com/de-de/sysinternals/downloads/listdlls)
+- [handle.exe](http://technet.microsoft.com/en-us/sysinternals/bb896655.aspx)
+- Pclip.exe
+- Ressource Monitor & netstat
 
 [PowerForensics - PowerShell Digital Forensics](https://powerforensics.readthedocs.io/en/latest/)
 
-#### Skripte:
+#### __Live-Scripts:__
 [Invoke-LiveRespones](https://mgreen27.github.io/posts/2018/01/14/Invoke-LiveResponse.html)
 [Live-Forensicator](https://github.com/Johnng007/Live-Forensicator)
 [Huntress](https://github.com/zaneGittins/Huntress)
 
-### Post-mortem forensics:
+### __Post-mortem forensics:__
 
-#### Locations:
+#### __Locations:__
 
-Registry:
+__Registry:__
 
 | Registry hive | description | Path to hive-file | environment variable | Supporting file
 | ----------- | ----------- | ----------- | ----------- | ----------- | 
@@ -143,11 +260,11 @@ Registry:
 | HKCU\Software\Microsoft\ <br>Windows\CurrentVersion\ <br>Explorer\UserAssist | User Assist | | | |
 | | Amcache.hve / RecentFileCache.bcf | | \%SystemRoot%\ <br>AppCompat\Programs\ <br>Amcache.hve | |
 | SYSTEM\CurrentControlSet\ <br>Control\SessionManager\ <br>AppCompatCache | Registry: Shimcache (until Win10) <br>Path: Win11 Programm Compatibility Assistant (PCA) | | C:\Windows\ <br>appcompat\pca | |
-| | Windows 10 Timeline |  C:\Users\<Benutzer>\ <br>AppData\Local\ <br>Connected <br>DevicesPlatform\L.<Benutzer>\ <br>ActivitiesCache.db | | |
+| | Windows 10 Timeline |  C:\Users\<user>\ <br>AppData\Local\ <br>Connected <br>DevicesPlatform\L."user"\ <br>ActivitiesCache.db | | |
 
-#### Tools:
+#### __Tools:__
 
-RegRipper(sometimes wrong outputs -> not used in entreprises commonly):
+__RegRipper__ (sometimes wrong outputs -> not used in entreprises commonly):
 
 ```
 rip.pl -r <HIVE> -p <plugin>
@@ -167,13 +284,13 @@ example(getting VNC password): reg.exee QUERY "HKEY_LOCAL_MACHINE\Software\ORL\W
 [Windows Registry Recovery - Donwload(Download starting)](https://www.mitec.cz/Downloads/WRR.zip)
 
 
-### Supertimeline
+### __Supertimeline:__
 
 [Plaso](https://plaso.readthedocs.io/en/latest/)
 
 [Log2timeline - Timeline Color Template](https://github.com/riodw/Log2timeline-TIMELINE_COLOR_TEMPLATE)
 
-### Incident Response Platforms (open source?)
+### __Incident Response Platforms (open source?)__
 
 CYBER TRIAGE
 
