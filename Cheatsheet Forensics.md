@@ -42,6 +42,11 @@ Mounting:
 
 `xmount --in <source format> <source location> --out <target format> <target location>`
 
+Check!
+` mount -t ntfs-3g -o ro,loop,noexec,show_sys_files,streams_interface=windows,offset=$((51*512)) windowsxp.dd /mnt/windows_mount/ `
+
+`umount <mounted_location>`
+
 ### __Disk Backup:__
 
 __Tools:__
@@ -71,15 +76,146 @@ Piecewise Hashing (Tools):
 Context  Triggered Piecewise Hashing (Tools):
 
     ssdeep
+        hash1 = ssdeep.hash(<input1>)
+        hash2 = ssdeep.hash(<input2>)
+
+        ssdeep.compare(hash1,hash2)
 
 ### __File system analysis:__
 
 #### __Tools:__
 
-The Sleuth Kit (TSK):
+__The Sleuth Kit (TSK):__
 
-autopsy
+__Overview integrated tools:__
 
+![Sleuth Kit Tool list 1](images\Sleuth_Kit_tool_list_1.png)
+![Sleuth Kit Tool list 2](images\Sleuth_Kit_tool_list_2.png)
+
+__commonly used ones:__
+
+`mmls -i list`
+
+`mmls -t dos <image-file>`
+
+`dcfldd if=windowsxp.dd bs=512 skip=51 count=256224 of=filesystem.dd`
+
+`sudo mount -o rw filesystem.dd /mnt/windows_mount`
+
+`fsstat <filesystem-image>`
+
+```
+fls -r -d <filesystem-image>
+    -r recusive
+    -d only deleted files
+```
+
+```
+icat -r <filesystem-image> <file-location e.g. 1476-128-4> > <recovered-file>
+    -r recovery mode
+
+        1476 -> NTFS file
+        128-4 -> MFT entry attribute
+        
+```
+
+String search:
+
+    Linux -> strings
+    TSK -> srch_strings
+        srch_strings -t d <filesystem-image> > keywords.ascii.str
+
+calculate sector adress:  sector address = floor(1588604(Name?)/512(Name?))
+
+`ifind -f <filesystem-type -d <sector adress> <filesystem-image>`
+
+`istat -f <filesystem-type <filesystem-image> <337-128-4(Name?)>`
+
+`ffind <filesystem-image> <337-128-4(Name?)>`
+
+`icat <filesystem-image> <337-128-4(Name?)> > <output-filename>`
+
+Hash-value comparison: `hfind`
+
+
+__autopsy:__
+
+`sudo autopsy`
+
+__Data Carving:__
+
+```
+sudo scalpel
+config at: /etc/scalpel/scalpel.conf
+``` 
+
+
+`sudo foremost`
+
+`Testdisk`
+
+`Photorec`
+
+__Data Hiding:__
+
+Bmap (view installation in setup cheatsheet):
+```
+Usage:
+    $ dcfldd if=/dev/urandom of=file.dat bs=1 count=1058    create file with 1058bytes of random data  
+    $ ls -l file.dat                                        Whats the size in bytes?
+    $ du file.dat                                           How much memory is reserved for file.dat?
+    $ sudo su
+    $ echo "My secrete message!" | bmap --putslack file.dat put file into slackspace
+    $ bmap --slack file.dat                                 read out secret message
+```
+
+copy Slackspace out of filesystem-image: `blkls -s <filesystem-image>` or autopsy
+
+__Alternate Data Streams:__
+
+lads.exe <br>streams.exe <br>sfind.exe 
+
+fls/autospsy aswell 
+
+__MFT & Journal-Files:__
+
+filesystem has to be in raw format: `istat -o <51(Name?)> -i raw <filesystem-image>`
+
+| Journal | description |
+| ----------- | ----------- |
+| $MFT| MasterFileTable|
+| $STANDART_INFORMATION <br>$FILENAME| timestamps for files|
+| $LOGFILE| saves all ongoing occurrences|
+| $I30 <br>$INDX| file & directory names|
+| $UsnJrnl | Update Sequence Number |
+| $Max (AD of  $Extend\$UsnJrnl)| Information about Change Journal like e.g. the size|
+| $J ((AD of  $Extend\$UsnJrnl))| Contents of the journal together with Date, time and reason for the change|
+
+ 
+https://github.com/jschicht/LogFileParser
+
+extract $Logfile with fls and icat then:
+
+`LogFileParser64.exe <path_to_file>\$LogFile /TimeZone:0.00 /SourceIs32bit:1`
+
+https://github.com/jschicht/ExtractUsnJrnl
+
+show status and size: `fsutil usn queryjournal C:`
+
+Recover deleted files by MFT number from csv file of ExctractUsnJrnl-Tool:
+
+https://github.com/jschicht/NtfsFileExtractor
+
+old UsnJrnl could be in not-allocated memory:
+
+-> Carver https://github.com/PoorBillionaire/
+
+__Timelines:__
+
+```
+$ fls -r -f ntfs -m / <filesystem-image> > bodyfile.txt
+$ mactime -b bodyfile.txt > timeline.txt
+```
 
 
 ## 3. Operating system forensics (Linux)

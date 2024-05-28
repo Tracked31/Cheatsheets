@@ -30,3 +30,15 @@
 ## Environments:
 #### Python 2 Environment:
 
+
+
+## Others:
+
+#### Bmap:
+```
+$ sudo apt-get install libc6-dev-i386
+$ git clone https://github.com/CameronLonsdale/bmap.git
+$ cd bmap
+$ make
+$ sudo cp bmap /sbin/bmap
+```
