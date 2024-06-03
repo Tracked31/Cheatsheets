@@ -77,6 +77,8 @@ https://github.com/danielmiessler/SecLists
 
 [Shodan](https://www.shodan.io/)
 
+[List of portnumbers with common protocols](https://de.wikipedia.org/wiki/Liste_der_Portnummern)
+
 Default Password Databases:
 
 * https://www.defaultpassword.com/
@@ -96,8 +98,7 @@ Content Discovery:
 
 #### ffuf:
 ```
-ffuf -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt -u <url>/FUZZ
-   
+ffuf -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt -u <url>/FUZZ  
 ```
 #### dirb:
 ```
@@ -224,6 +225,11 @@ nmap <scan_type> <options> <machine_ip/network>
             -oX     save output in XML format
             -oA     save output in normal,XML and Grepable format
 ```
+
+### Other Tipps:
+
+* change `etc/hosts` if domain is not available/gets redirected
+* Banner Grabbing with nc `nc -vn <ip> <port>`
 
 ## 4. Vulnerability Scanner:
 

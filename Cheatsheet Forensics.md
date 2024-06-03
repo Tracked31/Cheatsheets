@@ -89,8 +89,8 @@ __The Sleuth Kit (TSK):__
 
 __Overview integrated tools:__
 
-![Sleuth Kit Tool list 1](images\Sleuth_Kit_tool_list_1.png)
-![Sleuth Kit Tool list 2](images\Sleuth_Kit_tool_list_2.png)
+![Sleuth Kit Tool list 1](images/Sleuth_Kit_tool_list_1.png)
+![Sleuth Kit Tool list 2](images/Sleuth_Kit_tool_list_2.png)
 
 __commonly used ones:__
 
@@ -339,7 +339,7 @@ convert timestamp from epoch time `date -d @1655199269`
 
 `tasklist /svc`
 
-![Windows or. external tools](images\Tools.png)
+![Windows or. external tools](images/Tools.png)
 
 [Windows Sysinternals](https://docs.microsoft.com/de-de/sysinternals/downloads/sysinternals-suite)
     
