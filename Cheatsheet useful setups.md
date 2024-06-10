@@ -9,7 +9,7 @@
 
 `nano setup-pure-ftp`
 
-```
+```bash
     #!/bin/bash
     
     groupadd ftpgroup
@@ -35,7 +35,7 @@
 ## Others:
 
 #### Bmap:
-```
+```bash
 $ sudo apt-get install libc6-dev-i386
 $ git clone https://github.com/CameronLonsdale/bmap.git
 $ cd bmap
