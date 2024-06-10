@@ -34,7 +34,21 @@
 
 **5. [Memory forensics](#5-memory-forensics)**
 
+* [Acquisition](#acquisition)
+* [Analysis](#analysis)
+    * [unstructered](#unstructured)
+    * [structured](#structured)
+    * [dump of proccesses at runtime](#dump-of-processes-at-runtime)
+
 **6. [Application forensics](#6-application-forensics)**
+
+* [Browser](#browser)
+    * [Firefox](#firefox)
+    * [Chrome](#chrome)
+    * [Edge](#edge)
+* [E-mail](#email)
+    * [Thunderbird](#thunderbird)
+    * [MS Outlook](#ms-outlook)
 
 **7. [Others](#7-others)**
 
@@ -69,24 +83,24 @@ Check!
 
 `dd` `dcfldd` `dc3dd`
 
-Sicherung: `dd if=/dev/<source> of=<dest>.img bs=65536 conv=noerror,sync`
+Backup: `dd if=/dev/<source> of=<dest>.img bs=65536 conv=noerror,sync`
 
-Remote Sicherung über netcat: `dd if=/dev/<disk0> | nc <ip> <port>`
+Remote backup via netcat: `dd if=/dev/<disk0> | nc <ip> <port>`
 
-Hashwert: `sha256sum /dev/sdb`
+Hash value: `sha256sum /dev/sdb`
 
-Vergleich von Hashes:
+Comparison of hashes:
 
-    1. Masterkopie erzeugen & Hashwert vergleichen: `dd if=/dev/sdb of=masterkopie bs=512`
-    `sha256sum masterkopie`
+    1. Create mastercopy & compare hash value: `dd if=/dev/sdb of=mastercopy bs=512`
+    `sha256sum mastercopy`
 
-    2. Arbeitskopie von Masterkopie erzeugen & Hashwert vergleichen:
-    `dd if=masterkopie of=arbeitskopie bs=512`
-    `sha256sum arbeitskopie`
+    2. Create workingcopy from mastercopy & compare hash value:
+    `dd if=mastercopy of=workingcopy bs=512`
+    `sha256sum workingcopy`
 
 Piecewise Hashing (Tools):
 
-    sdhash (binär)
+    sdhash (binary)
     sdtext (text)
 
 Context  Triggered Piecewise Hashing (Tools):
@@ -453,6 +467,33 @@ GRR Rapid Response
 
 ## 5. Memory forensics
 
+### __Acquisition:__
+
+### __Analysis:__
+
+#### __unstructured:__
+
+#### __structured:__
+
+#### __dump of processes at runtime?:__
+
+
 ## 6. Application forensics
+
+### __Browser:__
+
+#### __Firefox:__
+
+#### __Chrome:__
+
+#### __Edge:__
+
+### __Email:__
+
+#### __General:__
+
+#### __Thunderbird:__
+
+#### __MS Outlook:__
 
 ## 7. Others
