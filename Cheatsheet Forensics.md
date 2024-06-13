@@ -58,6 +58,15 @@
 [Eric Zimmermann Tools](https://ericzimmerman.github.io/#!index.md)
 
 [VirusTotal](https://www.virustotal.com/gui/home/upload)
+- can be used for ip, hash, domain, file
+
+[Malpedia](https://malpedia.caad.fkie.fraunhofer.de/)
+
+[AbuseIPDB](https://www.abuseipdb.com/)
+
+
+
+
 
 ## 2. Disk forensics
 
@@ -462,7 +471,7 @@ example(getting VNC password): reg.exee QUERY "HKEY_LOCAL_MACHINE\Software\ORL\W
 
 CYBER TRIAGE
 
-Velociraptor
+[Velociraptor](https://docs.velociraptor.app/)
 
 GRR Rapid Response
 
@@ -474,8 +483,8 @@ GRR Rapid Response
 
 | Location | description |
 | ----------- | ----------- |
-| \\.\PhysicalMemory | Device Object in Windows 2000-VISTA, RAW data |
-| \\.\DebugMemory | Device Object in Windows 2000-VISTA, RAW data | 
+| `\\.\PhysicalMemory` | Device Object in Windows 2000-VISTA, RAW data |
+| `\\.\DebugMemory` | Device Object in Windows 2000-VISTA, RAW data | 
 -> no longer accessible from user mode
 
 | Location(file) | description | analysis |
@@ -588,22 +597,21 @@ use DB Browser SQlite to view databases
 
 - files without file extension
 
-| type | path | 
-| ----------- | ----------- | 
-| Configuration | \Users\<UserName>\AppData\Local\Google\Chrome\User Data\Default |
-| Configuration | \Users\<UserName>\AppData\Local\Google\Chrome\User Data\Profile x |
-| History |  |
-| Bookmarks | \Users\<UserName>\AppData\Local\Google\Chrome\User Data\Default\Bookmarks |
-| Cookies | till version 95:  \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Cookies <br> from version 96:  \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Network\Cookies|
-| Cache | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Cache\Cache_Data |
-| Passwords | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Login_Data  |
-| History |  |  |
+| type | path | additional info/format
+| ----------- | ----------- | ----------- | 
+| Configuration | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default | SQLite-database |
+| Configuration | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Profile_x | SQLite-database |
+| History |  | SQLite-database |
+| Bookmarks | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Bookmarks | json format <br> 3 substructures <br> "bookmark_bar" contains Bookmarks <br> timestamp in Google Chrome Value |
+| Cookies | till version 95:  \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Cookies <br> from version 96:  \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Network\Cookies| SQLite-database|
+| Cache | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Cache\Cache_Data | different format <br> -> use Nirsoft ChromeCacheView |
+| Passwords | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Login_Data  | SQLite-database <br> table "logins" contains URL's, username, passwords|
 
 #### __Edge:__
 ESE Datenbank spartan.edb -> view with Nirsoft ESEDatabaseView
 
-\Users\<UserName>\AppData\Local\Packages\Microsoft.MicrosoftEdge_xxxx\AC\MicrosoftEdge
-\User\Default\DataStore\Data\nouser1\xxxx-xxx\DBStore\spartan.edb
+`\Users\<UserName>\AppData\Local\Packages\Microsoft.MicrosoftEdge_xxxx\AC\MicrosoftEdge`
+`\User\Default\DataStore\Data\nouser1\xxxx-xxx\DBStore\spartan.edb`
 
 #### __further Tools:__
 - Nirsoft WebCacheImageInfo
@@ -619,8 +627,55 @@ ESE Datenbank spartan.edb -> view with Nirsoft ESEDatabaseView
 
 #### __General:__
 
+E-Mail Header/IP Analysis:
+
+[Google Toolbox Header Analyzer](https://toolbox.googleapps.com/apps/messageheader/analyzeheader)
+
+[MX Lookup](https://mxtoolbox.com/EmailHeaders.aspx)
+
+[IP Fingerprints](https://www.ipfingerprints.com/)
+
+[WolframAlpha](https://www.wolframalpha.com/)
+
+[CentralOps.net](https://centralops.net/co/)
+
+[Robtex](https://www.robtex.com/)
+
+Filetypes:
+
+*.mbox, *.mbx, *.msf, *.email, *.eml, *.pst, *.msg, *.dbx, *.ost, …    
+
+UNIX E-Mail Logs:
+| path | description |
+| ----------- | ----------- | 
+| /etc/sendmail.cf | configuration for sendmails |
+| /etc/syslog.conf | sendmail events | 
+| /var/log/maillog | SMTP, POP3 communication |
+| /var/spool/mail/… <br>  /var/mail/…| "temporary mailbox" |
+
 #### __Thunderbird:__
 
-#### __MS Outlook:__
+MBOX-file: 
+- `\Benutzer\%USERNAME%\AppData\Roaming\Thunderbird\Profiles`
+    - saves E-mails
+- additionaly there are .msf files saved
+    - `…\Thunderbird\Profiles\<Profile>.default\ImapMail\Mail`
+#### __MS Outlook(2013&2016):__
+
+`find . -iname '*.ost'`
+
+PST & OST file:
+
+`\Benutzer\%USERNAME%\AppData\Local\Microsoft\Outlook`
+
+Locations:
+- `\Users\<username>\AppData\Local\Microsoft\Outlook`
+- `\Users\<username>\Roaming\Local\Microsoft\Outlook`
+- `\Users\<username>\Documents\Outlook Files`
+- `\Documents and Settings\<username>\Local Settings\Application Data\Microsoft\Outlook`
+
+Tools:
+- Outlook Viewer
+- Kernel OST Viewer
 
 ## 7. Others
