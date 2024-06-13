@@ -39,6 +39,7 @@
     * [unstructered](#unstructured)
     * [structured](#structured)
     * [dump of proccesses at runtime](#dump-of-processes-at-runtime)
+    * [IOC's](#iocs)
 
 **6. [Application forensics](#6-application-forensics)**
 
@@ -469,24 +470,150 @@ GRR Rapid Response
 
 ### __Acquisition:__
 
+#### __Windows:__
+
+| Location | description |
+| ----------- | ----------- |
+| \\.\PhysicalMemory | Device Object in Windows 2000-VISTA, RAW data |
+| \\.\DebugMemory | Device Object in Windows 2000-VISTA, RAW data | 
+-> no longer accessible from user mode
+
+| Location(file) | description | analysis |
+| ----------- | ----------- | ----------- |
+| C:\hiberfil.sys |  in active mode saves part of the RAM <br> Power-On overwrites content with zeros <br> gets encrypted by Bitlocker not by TrueCrypt| save with RawCopy.exe, FTKImager <br> analyze with Hibr2Bin, Volatility, Rekall, PTFinder, FATKit, MemParser, PMODump, SandMan|
+| C:\pagefile.sys | pagefile of virual memory <br> outsources data during runtime| use strings or YARA-Rules |
+| C:\swapfile.sys | only Windowsn 8/10 <br> fixed size of 256 MB <br> pagefile for modern apps (saves entire working set)|  |
+
+``` 
+powercfg /h[hibernate] [on|off]
+psshutdown –h
+ ```
+
+Tools:
+- FTK Imager
+- Belkasoft Live RAM Capturer
+- OSForensics
+- Sysinternals LiveKd.exe
+- [WinPmem](https://github.com/Velocidex/WinPmem)
+
+#### __Linux:__
+
+| Location | description |
+| ----------- | ----------- |
+| /dev/mem | RAW data, System Memory|
+| /dev/fmem| fmem Kernel modules|
+| /dev/kmem | Kernel Memory|
+| /proc/kcore $INDX| some file systems|
+
+| Location | type |
+| ----------- | ----------- | 
+| /proc/swaps | swap-file |
+| /etc/fstab | swap-partition | 
+
+`swapon -s`
+
+Tools:
+- LiME – Linux Memory Extractor
+
+
+
 ### __Analysis:__
 
 #### __unstructured:__
 
+Tools:
+- strings
+- grep
+- less
+- Regular expressions
+- Data Carving:
+    - scalpel
+    - foremost
+    - [Digital Corpora Bulk Extractor](https://corp.digitalcorpora.org/downloads/bulk_extractor/)
+        - [User Manual Guide](https://digitalcorpora.s3.amazonaws.com/downloads/bulk_extractor/BEUsersManual.pdf)
+- use [IOC's](#iocs)
+
 #### __structured:__
+
+Tools:
+- Volatility:
+    - [Command References](https://github.com/volatilityfoundation/volatility/wiki/Command-Reference)
+    - [Volatitily Community](https://github.com/volatilityfoundation/community)
+    - since version 3.0 no longer --profile needed
+- Rekall
+- Redline
+- [MemProcFS](https://github.com/ufrisk/MemProcFS)
+    - makes you view the RAM in virtual filesystem
 
 #### __dump of processes at runtime?:__
 
+- dump processes from Process Explorer/Process Hacker
+
+#### __IOC's:__
+
+types of IOC - Rules:
+- YARA (memory)
+    - [YARA rule collection](https://github.com/Yara-Rules/rules)
+    - [YARA - Readthedocs](https://yara.readthedocs.io/en/v3.6.3/writingrules.html)
+- Snort (network)
+- OpenIOC
+- STIX
+- MISP
+
+[IOC-Collection](https://github.com/sroberts/awesome-iocs)
+
+Tools TO-DO:
+- Loki
 
 ## 6. Application forensics
 
 ### __Browser:__
 
+use DB Browser SQlite to view databases
+
 #### __Firefox:__
 
+| file | description |
+| ----------- | ----------- | 
+| places.sqlite | Browser history, download history, bookmarks |
+| cookies.sqlite | Cookies | 
+| formhistory.sqlite | Search in the search bar or in web forms |
+| key4.db, logins.json| passwords |
+
+[Dumpzilla](https://www.dumpzilla.org/)
+- python3 script used to extract artifacts from Firefox, Iceweasel, Seamonkey
+
 #### __Chrome:__
+`chrome://version`
+
+- files without file extension
+
+| type | path | 
+| ----------- | ----------- | 
+| Configuration | \Users\<UserName>\AppData\Local\Google\Chrome\User Data\Default |
+| Configuration | \Users\<UserName>\AppData\Local\Google\Chrome\User Data\Profile x |
+| History |  |
+| Bookmarks | \Users\<UserName>\AppData\Local\Google\Chrome\User Data\Default\Bookmarks |
+| Cookies | till version 95:  \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Cookies <br> from version 96:  \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Network\Cookies|
+| Cache | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Cache\Cache_Data |
+| Passwords | \Users\<UserName>\AppData\Local\Google\Chrome\User_Data\Default\Login_Data  |
+| History |  |  |
 
 #### __Edge:__
+ESE Datenbank spartan.edb -> view with Nirsoft ESEDatabaseView
+
+\Users\<UserName>\AppData\Local\Packages\Microsoft.MicrosoftEdge_xxxx\AC\MicrosoftEdge
+\User\Default\DataStore\Data\nouser1\xxxx-xxx\DBStore\spartan.edb
+
+#### __further Tools:__
+- Nirsoft WebCacheImageInfo
+- Nirsoft ImageCacheViewer
+- Nirsoft BrowserAddonsView
+- Nirsoft MyLastSearch
+- Nirsoft WebBrowserPassview
+- Web Historian
+- [Belkasoft Browser Analyzer](https://belkasoft.com/get)
+- [Hindsight](https://github.com/obsidianforensics/hindsight)
 
 ### __Email:__
 
