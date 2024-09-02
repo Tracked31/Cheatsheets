@@ -12,8 +12,12 @@
 **3. [Information Gathering](#3-information-gathering)**
 
 * [useful links](#useful-links)
-* [Tools](#tools-1)
-* [Nmap](#nmap)
+* [Passive](#passive)
+    * [OSINT](#osint)
+* [Active](#active)
+* [Others & Combined](#others--combined)
+    * [Nmap](#nmap)
+* [Other Tipps](#other-tipps)
 
 **4. [Vulnerability Scanner](#4-vulnerability-scanner)**
 
@@ -42,8 +46,6 @@
 **9. [Exfiltration](#9-exfiltration)**
 
 * [Server](#server)
-* [Upload](#upload)
-* [Download](#download)
 
 **10. [Persistence](#10-persistence)**
 
@@ -75,8 +77,6 @@ https://github.com/danielmiessler/SecLists
 
 [OWASP favicon Database](https://wiki.owasp.org/index.php/OWASP_favicon_database)
 
-[Shodan](https://www.shodan.io/)
-
 [List of portnumbers with common protocols](https://de.wikipedia.org/wiki/Liste_der_Portnummern)
 
 Default Password Databases:
@@ -86,15 +86,81 @@ Default Password Databases:
 * https://datarecovery.com/rd/default-passwords/
 * https://redoracle.com/PasswordDB/vpasp.html
 
-### Tools:
+### Passive:
 
-Content Discovery:
+[Shodan](https://www.shodan.io/)
 
-[Wappanalyzer](https://www.wappalyzer.com/)
+[Smap (Nmap but passive -> same syntax)](https://github.com/s0md3v/Smap)
 
 [Wayback Machine](https://web.archive.org/)
 
-[WPscan](https://wpscan.com/#solutions)
+Pingsweep:
+```bash
+#!/bin/bash
+
+for ip in $(seq 0 250) ; do
+#echo <>.<>.<>.$ip
+ping -c <>.<>.<>.$ip |grep "bytes from" |cut -d" " -f 4 |cut -d ":" -f 1 &
+done
+```
+Domain Enumeration:
+
+`whois <domain_name>`
+```
+nslookup <domain_name> <dns_server(local/public)(optional)>
+    -type 
+        A       IPv4 Addresses
+        AAAA    IPv6 Addresses
+        CNAME   Canonical Name
+        MX      Mail Servers
+        SOA     Start of Authority
+        TXT     TXT Records
+```
+Subdomain Enumeration:
+
+[DNSdumpster](https://dnsdumpster.com/)
+
+[Sublist3r](https://github.com/aboul3la/Sublist3r)
+```
+./sublist3r.py -d <domain>
+```
+SSL/TLS Certificates etc.:
+
+https://crt.sh/
+
+https://ui.ctsearch.entrust.com/ui/ctsearchui
+
+[SSL Server Test](https://www.ssllabs.com/ssltest/)
+        
+-> detailed information about certificate, configuration(protocols, cipher suites, protocol handshake)
+
+#### OSINT:
+
+[OSINT-Framework](https://github.com/Ignitetechnologies/Mindmap/blob/main/OSINT/OSINT%20Framework.pdf)
+
+[awesome-osint](https://github.com/jivoi/awesome-osint)
+
+-> overview of every OSINT topic with tools/websites
+
+[SpiderFoot - OSINT Automation Tool](https://github.com/smicallef/spiderfoot)
+
+[Social Searcher](https://www.social-searcher.com/)
+
+[Security Headers](https://securityheaders.com/)
+
+[Wappanalyzer](https://www.wappalyzer.com/)
+
+[WPscan - Website](https://wpscan.com/#solutions)
+
+#### Google Dorking:
+
+-> [use the google advanced search](https://www.google.com/advanced_search)
+
+[dorksearch](https://dorksearch.com/)
+
+[Google Hacking Database (Exploit Database)](https://www.exploit-db.com/google-hacking-database)
+
+### Active:
 
 #### ffuf:
 ```
@@ -108,50 +174,20 @@ dirb <url> /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt
 ```
 gobuster dir --url <url> -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt   
 ```
-
-SSL/TLS Certificates:
-
-https://crt.sh/
-
-https://ui.ctsearch.entrust.com/ui/ctsearchui
-
-
-DNS Bruteforce: 
-```
-dnsrecon   
-```
 Domain Enumeration:
-
-`whois <domain_name>`
-
-```
-nslookup <domain_name> <dns_server(local/public)(optional)>
-    -type 
-        A       IPv4 Addresses
-        AAAA    IPv6 Addresses
-        CNAME   Canonical Name
-        MX      Mail Servers
-        SOA     Start of Authority
-        TXT     TXT Records
-```
 ```
 dig @<server> <domain_name> <type>
     server -> optional
     type -> see nslookup
 ```
 
+### Others & Combined:
 
-Subdomain Enumeration:
-
-[DNSdumpster](https://dnsdumpster.com/)
-
-[Sublist3r](https://github.com/aboul3la/Sublist3r)
+DNS enumeration: 
 ```
-./sublist3r.py -d <domain>
+dnsrecon -d <domain> [options]  
 ```
-
-
-### Nmap:
+#### Nmap:
 ```
 nmap <scan_type> <options> <machine_ip/network>
 
@@ -721,10 +757,16 @@ hydra -l <username> -P <wordlist.txt> <server> <service>
 
 ### Server:
 
-### Upload:
+SCP:
+```
+copy a file from local to remote server: scp <local_file_path> <username>@<ip>:<save_to_file_path>
 
-### Download:
+copy file from remote server to local host: scp <ip>:<remote_file_path> <local_save_path>
 
+
+
+copy directory: scp -r <directory> <username>@<ip>:<path_to_remote_directory>
+```
 ## 10. Persistence:
 
 ## 11. Cleanup:
