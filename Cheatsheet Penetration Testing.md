@@ -390,6 +390,9 @@ Example for Windows
 
     A: socat OPENSSL:<target_ip>:<port_number>,verify=0 -
 ```
+### Metassploit:
+
+![Metasploit](images/Metasploit.png)
 
 ### Msfvenom:
 
@@ -719,7 +722,38 @@ https://crackstation.net/
 
 [Hash-identifier](https://gitlab.com/kalilinux/packages/hash-identifier/-/raw/kali/master/hash-id.py)
 
-### Hashcat:
+[RegEx expressions & bash scripts for PW cracking](https://www.unix-ninja.com/p/A_cheat-sheet_for_password_crackers)
+
+### [Hashcat](https://hashcat.net/wiki/):
+
+```
+hashcat 
+
+options:
+    -m                  hash-type
+            `[example hashes](https://hashcat.net/wiki/doku.php?id=example_hashes)`
+    -a                  attack-mode
+            0   Straight
+            1   Combination
+            3   Brute Force
+            6   Hybrid Wordlist + Mask
+            7   Hybrid Wordlist + Wordlist
+            9   Assosiation
+            
+    --force             ignore warnings
+    --runtime           abort session after X seconds of runtime
+    --status            enable automatic update of the status screen
+    -o                  define outfile for recovered hash
+    --show              show cracked passwords found in potfile
+    --session           define specific session name exp.:--session=session1
+    --restore           restore session from --session
+    --restore-file-path specific path to restore lenghts
+    -O                  enable optimized kernels
+
+
+
+
+```
 
 ### John the Ripper:
 https://www.openwall.com/john/
