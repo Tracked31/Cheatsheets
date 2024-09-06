@@ -775,7 +775,7 @@ https://crackstation.net/
 ### [Hashcat](https://hashcat.net/wiki/):
 
 ```
-hashcat 
+hashcat [options] <hash_file> <wordlist>
 
 options:
     -m                  hash-type
@@ -797,10 +797,6 @@ options:
     --restore           restore session from --session
     --restore-file-path specific path to restore lenghts
     -O                  enable optimized kernels
-
-
-
-
 ```
 
 ### John the Ripper:
