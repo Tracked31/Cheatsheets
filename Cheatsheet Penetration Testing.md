@@ -28,6 +28,7 @@
 * [Reverse Shell useful links](#reverse-shells-useful-links)
 * [Netcat](#netcat)
 * [Socat](#socat)
+* [Metasploit](#metasploit)
 * [Msfvenom](#msfvenom)
 * [Powershell one-liner](#powershell-one-liner)
 * [PHP Webshell one-liner](#php-webshell-one-liner)
@@ -390,7 +391,7 @@ Example for Windows
 
     A: socat OPENSSL:<target_ip>:<port_number>,verify=0 -
 ```
-### Metassploit:
+### Metasploit:
 
 ![Metasploit](images/Metasploit.png)
 
