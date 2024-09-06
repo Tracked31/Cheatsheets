@@ -635,8 +635,7 @@ T:  execute
 
     We need to bypass Execution Policy in order to run this tool.
 
-    ```
-    Powershell:
+    ```powershell
         Set-ExecutionPolicy Bypass -Scope process -Force
         . .\PrivescCheck.ps1
         Invoke-PrivescCheck
@@ -732,7 +731,7 @@ hashcat
 
 options:
     -m                  hash-type
-            `[example hashes](https://hashcat.net/wiki/doku.php?id=example_hashes)`
+            https://hashcat.net/wiki/doku.php?id=example_hashes
     -a                  attack-mode
             0   Straight
             1   Combination
