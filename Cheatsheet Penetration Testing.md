@@ -5,7 +5,7 @@
 **1. [General](#1-general)**
 
 * [Tools](#tools)
-* [Cheatsheets](#cheatcheets)
+* [Cheatsheets](#cheatsheets)
 * [Wordlists](#wordlists)
 
 **2. [Information Gathering](#2-information-gathering)**
@@ -74,7 +74,7 @@
 
 [MITRE ATT&CK](https://attack.mitre.org/)
 
-### Cheatcheets:
+### Cheatsheets:
 
 [HackTricks](https://book.hacktricks.xyz/generic-methodologies-and-resources/pentesting-methodology)
 
@@ -86,7 +86,7 @@
 [Liodeus - OSCP Cheatsheet](https://liodeus.github.io/2020/09/18/OSCP-personal-cheatsheet.html#linux-4)
 - port by port procedure
 
-[OSCP Cheatcheet](https://github.com/0xsyr0/OSCP?tab=readme-ov-file)
+[OSCP Cheatsheet](https://github.com/0xsyr0/OSCP?tab=readme-ov-file)
 
 [Red Team Notes - Pentesting Cheatsheet](https://www.ired.team/offensive-security-experiments/offensive-security-cheetsheets)
 
