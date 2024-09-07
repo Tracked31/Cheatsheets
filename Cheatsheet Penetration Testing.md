@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-**1. [Other Cheatsheets/Libraries](#1-general)**
+**1. [General](#1-general)**
 
 * [Tools](#tools)
 * [Cheatsheets](#cheatcheets)
