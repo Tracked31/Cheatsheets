@@ -779,11 +779,7 @@ Dumping:
 
     `type C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Config\web.config | findstr connectionString`
 
-5. Retrieve Credentials over PuTTY: 
-
-    `reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s`
-
-6. Windows Privileges:
+5. Windows Privileges:
     
     `whoami /priv`
 
@@ -849,6 +845,7 @@ Dumping:
     Passwords:
     reg query HKLM /f password /t REG_SZ /s
     reg query "HKLM\Software\Microsoft\Windows NT\CurrentVersion\winlogon"
+    reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s
     ```
 
 3. Scheduled Tasks:
