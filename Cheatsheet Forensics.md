@@ -611,6 +611,7 @@ use DB Browser SQlite to view databases
 ESE Datenbank spartan.edb -> view with Nirsoft ESEDatabaseView
 
 `\Users\<UserName>\AppData\Local\Packages\Microsoft.MicrosoftEdge_xxxx\AC\MicrosoftEdge`
+
 `\User\Default\DataStore\Data\nouser1\xxxx-xxx\DBStore\spartan.edb`
 
 #### __further Tools:__

